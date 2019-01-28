@@ -20,6 +20,9 @@ Vue.use(Router)
 export default new Router({
   routes: [
     {
+      path: '*', redirect: '/dashboard'
+    },
+    {
       path: '/',
       name: 'LoginPage',
       component: LoginPage

@@ -11,8 +11,8 @@ export default {
   data () {
     return {
       datacollection: null,
-      equationResponseArray: [],
-      equationOutputArray: []
+      concentrationArray: [],
+      dosageArray: []
     }
   },
   created () {
@@ -23,13 +23,13 @@ export default {
     fillData () {
       this.datacollection = {
         // Data for the x-axis of the chart
-        labels: this.equationResponseArray,
+        labels: this.concentrationArray,
         datasets: [
           {
             label: 'Data Result',
             backgroundColor: '#f87979',
             // Data for the y-axis of the chart
-            data: this.equationOutputArray
+            data: this.dosageArray
           }
         ]
       }
