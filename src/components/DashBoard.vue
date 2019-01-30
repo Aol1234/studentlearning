@@ -1,13 +1,15 @@
 <template>
   <section class="container">
-    <h1>{{msg}}</h1>
-    <p>Links should be placed here to connect to the graphical input test and mcq</p>
-    <router-link :to="{ name: 'LoginPage' }">Login</router-link>
+    <h1 class="dashHeading">{{msg}}</h1>
+    <p class="dashHeading">Links should be placed here to connect to the graphical input test and mcq</p>
     <b-card bg-variant="light"  >
     <b-container fluid class="text-light text-center" >
       <b-row class="mb-3">
         <b-col><router-link :to="{ name: 'GraphPage' }">Graph</router-link></b-col>
-        <b-col><router-link :to="{ name: 'GraphPage' }">Graph</router-link></b-col>
+        <b-col><router-link :to="{ name: 'ExampleMCQ' }">Example MCQ</router-link></b-col>
+      </b-row>
+      <b-row>
+        <b-col><router-link :to="{ name: 'ExampleMCQ' }">Classroom</router-link></b-col>
       </b-row>
     </b-container>
     </b-card>
@@ -29,8 +31,8 @@ export default {
 </script>
 
 <style scoped>
-.dashSquareLeft {
-  float: Left;
+.dashHeading {
+  text-align: center;
 }
 .dashSquareRight {
   float: Right;
