@@ -28,6 +28,9 @@ export default {
           {
             label: 'Data Result',
             backgroundColor: '#f87979',
+            borderWidth: 5,
+            fill: true,
+            borderColor: '#5775F8',
             // Data for the y-axis of the chart
             data: this.dosageArray
           }

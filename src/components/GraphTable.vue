@@ -19,9 +19,11 @@ import 'katex/dist/katex.min.css'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import katex from 'katex'
+const items = []
 export default {
   data () {
     return {
+      values: [],
       // m: {amount},
       fields: [
         {key: 'amount', label: 'Amount(ml)'},
@@ -29,11 +31,7 @@ export default {
         {key: 'concentration', label: 'Concentration of Organ Bath(M)'},
         'response'
       ],
-      items: [
-        { amount: 3, moles_added: '3', concentration: '3', response: '3' },
-        { amount: 3, moles_added: '3', concentration: '3', response: '3' },
-        { amount: 3, moles_added: '3', concentration: '3', response: '3' }
-      ],
+      items: items,
       striped: false,
       bordered: false,
       outlined: true,

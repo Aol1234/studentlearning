@@ -4,7 +4,7 @@
     <ul>
     </ul>
     <b-container id="test">
-      <b-card title="Input in ml of 10E-05 M of Noradrelaine" style="max-width: 95rem;" bg-variant="light">
+      <b-card title="Input in ml of 10E-05 M of Noradrenaline" style="max-width: 95rem;" bg-variant="light">
         <b-btn id="chartEditor" size="sm" text="Button" variant="primary" v-on:click="editor()">Push Event</b-btn>
         <div>
           <GraphSlider ref="slider"></GraphSlider>
@@ -23,14 +23,14 @@
         <div id="hideChart">
           <div class="columns">
             <div class="column">
-              <h3>Chart - dataset is plotted</h3>
+              <h3>Data Result</h3>
               <GraphDisplay ref="GraphDisplay"></GraphDisplay>
             </div>
           </div>
         </div>
       </b-card>
     </b-container>
-    <GraphTable></GraphTable>
+    <GraphTable  ref="GraphTable"></GraphTable>
     <CalculateEquations ref="CalculateEquations"></CalculateEquations>
   </section>
 </template>
@@ -64,7 +64,8 @@ export default {
       equationValue: CalculateEquations.equationValue,
       BInput: '', // '20^2',
       MinResponse: CalculateEquations.MinResponse, // '0',
-      MaxResponse: CalculateEquations.MaxResponse // '150'
+      MaxResponse: CalculateEquations.MaxResponse, // '150'
+      deviation: CalculateEquations.deviation
     }
   },
   methods: {
@@ -75,9 +76,10 @@ export default {
         if ((this.dosageArray.length + 1) <= this.$refs.slider.value) {
           this.dosageArray.push(this.milliLiterInput)
           // TODO: DOM
-          let milliLiter = this.milliLiterInput * 0.001 // Convert to Milli Value
+          let milliLiter = this.milliLiterInput // * 0.001 // Convert to Milli Value
           let result = this.$refs.CalculateEquations.calculateHillDosageResponse(milliLiter)
           console.log('Calculated Hill Langmuir Concentration from user input', result)
+          this.passToTable(this.milliLiterInput)
           this.$refs.GraphDisplay.dosageArray.push(result)
           this.$refs.GraphDisplay.concentrationArray.push(milliLiter)
           this.milliLiterInput = '' // Clears user input
@@ -100,6 +102,10 @@ export default {
     editor () {
       let testvalue = '2'
       eventHub.$emit('echo', testvalue)
+    },
+    passToTable (val) {
+      let array = { amount: val, moles_added: val, concentration: val, response: val }
+      this.$refs.GraphTable.items.push(array)
     },
     sample () {
       // FIXME This section used to highlight a curve of values
@@ -132,7 +138,6 @@ ul {
 
 li {
   display: inline-block;
-  margin: 0 10px;
 }
 
 a {

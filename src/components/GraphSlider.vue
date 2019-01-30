@@ -1,8 +1,7 @@
 <template>
   <div>
   <b-btn v-b-modal.modal1>Settings</b-btn>
-  <!-- Modal Component -->
-  <b-modal id="modal1" title="Bootstrap-Vue">
+  <b-modal id="modal1" title="Settings">
     <p class="my-4">Settings</p>
     <div v-show="value">
       <b-card style="max-width: 15rem; float: right;" bg-variant="light">
@@ -11,11 +10,14 @@
       </b-card>
     </div>
     <b-col lg="5">
-      <b-input-group>
-        <b-form-input v-model="BInput"  v-on.lazy:input='emitBInput(BInput)'></b-form-input>
-        <b-form-input v-model="MinResponse" v-on.lazy:input='emitMinResponse(MinResponse)'></b-form-input>
-        <b-form-input v-model="MaxResponse" v-on.lazy:input='emitMaxResponse(MaxResponse)'></b-form-input>
-      </b-input-group>
+      <label class="mr-sm-4" for="B">B</label>
+      <b-form-input id="B" label="Email address:" v-model="BInput"  v-on.lazy:input='emitBInput(BInput)'></b-form-input>
+      <label class="mr-sm-4" for="Min">Min Response</label>
+      <b-form-input id="Min" v-model="MinResponse" v-on.lazy:input='emitMinResponse(MinResponse)'></b-form-input>
+      <label class="mr-sm-4" for="Max">Max Response</label>
+      <b-form-input id="Max" v-model="MaxResponse" v-on.lazy:input='emitMaxResponse(MaxResponse)'></b-form-input>
+      <label class="mr-sm-4" for="deviation">Deviation</label>
+      <b-form-input id="Max" v-model="deviation" v-on.lazy:input='emitdeviation(deviation)'></b-form-input>
     </b-col>
   </b-modal>
   </div>
@@ -34,8 +36,8 @@ export default {
   watch: {
     deep: true,
     value (val) {
-      console.log('Caught!!!')
       if (val) {
+        console.log('GraphSlider WatchEvent Caught')
         this.$nextTick(() => this.$refs.slider.refresh())
       }
     }
@@ -45,6 +47,7 @@ export default {
       BInput: 20,
       MinResponse: 1,
       MaxResponse: 150,
+      deviation: 0.1,
       value: 8,
       options: {
         width: 8,
@@ -77,6 +80,9 @@ export default {
     },
     emitMaxResponse (val) {
       eventHub.$emit('MaxResponse', val)
+    },
+    emitdeviation (val) {
+      eventHub.$emit('deviation', val)
     }
   }
 }
