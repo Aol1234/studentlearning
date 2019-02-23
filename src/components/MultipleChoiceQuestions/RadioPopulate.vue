@@ -2,7 +2,8 @@
   <div>
     {{selected}}
     <div v-if="rendering === true" v-for="(n, i) in this.questions" :key="i">
-      <b-form-group label="Example MCQ">
+     {{question[i]}}
+      <b-form-group>
         <b-form-radio-group v-model= selected[i]
                             :options=questionnaire[i]
                             :name=names[i]>
@@ -10,11 +11,14 @@
       </b-form-group>
     </div>
     <button v-on:click="populate">Populate</button>
+    <button v-on:click="result">Result</button>
   </div>
 </template>
 <script>
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
+import axios from 'axios'
+const api = 'http://localhost:8002/'
 export default {
   name: 'RadioPopulate',
   data () {
@@ -24,11 +28,10 @@ export default {
       answers: [], // populated with answers
       selected: [], // populated with selected radio buttons
       names: [], // populated with identifiers of questions
-      questionnaire: [ [{ text: 'First radio', value: '0' }, { text: 'Second radio', value: '1' }, { text: 'Third radio', value: '2' }],
-        [{ text: 'aaa radio', value: '1', misc: 'testing that other attributes can be added' }, { text: 'bbb radio', value: '0' }, { text: 'ccc radio', value: '2' }],
-        [{ text: '111 radio', value: '2' }, { text: '222 radio', value: '1' }, { text: '333 radio', value: '0' }]
-      ]
-      // questionnaire: json.questionnaire
+      questionnaire: [],
+      questionnaireInfo: [],
+      question: [],
+      response: []
     }
   },
   methods: {
@@ -55,8 +58,38 @@ export default {
     populate () {
       this.getNumberOfQuestions()
       this.getAnswers()
-      this.rendering = true
+      this.rendering = true // Allows questions to render after preceding methods
+    },
+    result () {
+      let body = {results: ['test']}
+      console.log(this.selected)
+      axios.post(api + ':ID/:mcqID/result', JSON.stringify(body))
+        .then((response) => {
+          this.response = response.data
+          console.log('Response of results', this.response)
+        })
+        .catch(error => {
+          console.log(error)
+          this.errored = true
+        })
     }
+  },
+  created () {
+    // let body = {object_one: 'valueOne', object_two: 'valueTwo', array_one: {a: 'one', b: 'two'}}
+    axios.post(api + 'post')
+      .then((response) => {
+        this.response = response.data
+        let questions = response.data['Questions']
+        this.questionnaireInfo = this.response['Identifier']
+        for (let question in questions) {
+          this.question.push(questions[question]['Question'])
+          this.questionnaire.push(questions[question]['Answers'])
+        }
+      })
+      .catch(error => {
+        console.log(error)
+        this.errored = true
+      })
   }
 }
 </script>

@@ -9,9 +9,14 @@ import GraphPage from '@/components/GraphPage'
 import GraphDisplay from '@/components/GraphDisplay'
 import CalculateEquations from '@/components/CalculateEquations'
 import Profile from '@/components/Profile'
+import ExampleMCQ from '@/components/ExampleMCQ'
 import BootstrapVue from 'bootstrap-vue'
 import VueKatex from 'vue-katex'
 import 'katex/dist/katex.min.css'
+import axios from 'axios'
+import VueAxios from 'vue-axios'
+
+Vue.use(VueAxios, axios)
 
 Vue.use(BootstrapVue)
 Vue.use(VueKatex)
@@ -59,6 +64,11 @@ export default new Router({
           name: 'CalculateEquations',
           component: CalculateEquations
         }]
+    },
+    {
+      path: '/MCQ',
+      name: 'ExampleMCQ',
+      component: ExampleMCQ
     }
   ]
 })
