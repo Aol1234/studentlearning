@@ -40,6 +40,7 @@ export default {
   methods: {
     SignUp () {
       firebase.auth().createUserWithEmailAndPassword(this.user.email, this.user.password).then((user) => {
+        this.authSignUp()
         this.$router.replace('dashboard')
       }).catch((err) => {
         alert('Error: ' + err.message)
@@ -47,21 +48,17 @@ export default {
     },
     Login () {
       firebase.auth().signInWithEmailAndPassword(this.user.email, this.user.password).then((user) => {
-        this.auth()
+        this.authLogin()
         this.$router.replace('dashboard')
       }).catch((err) => {
         alert('Error: ' + err.message)
       })
     },
-    auth () {
+    authLogin () {
       firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function (idToken) {
-        // Send token to your backend via HTTPS
-        // let b = JSON.stringify('this is a  very long and pointless statement')
         console.log(idToken)
-        // this.idToken = idToken
-        axios.post(api + 'studentAuth', JSON.stringify({idtoken: idToken}))
+        axios.post(api + 'studentAuth/Login', JSON.stringify({idtoken: idToken}))
           .then((response) => {
-            // console.log(JSON.parse(response.data))
             console.log('Reply: ', response)
           })
           .catch(error => {
@@ -70,7 +67,21 @@ export default {
       }).catch(function (error) {
         console.log(error)
       })
-      // this.authServer(this.idToken)
+    },
+    authSignUp () {
+      firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function (idToken) {
+        console.log(idToken)
+        axios.post(api + 'studentAuth/SignUp', JSON.stringify({idtoken: idToken}))
+          .then((response) => {
+            console.log('Reply: ', response)
+            this.$router.replace('dashboard')
+          })
+          .catch(error => {
+            console.log(error)
+          })
+      }).catch(function (error) {
+        console.log(error)
+      })
     },
     authServer (idToken) {
       axios.post(api + 'studentAuth', JSON.stringify({idtoken: idToken}))
