@@ -5,7 +5,9 @@
     </ul>
     <b-container id="test">
       <b-card title="Input in ml of 10E-05 M of Noradrenaline" style="max-width: 95rem;" bg-variant="light">
-        <b-btn id="chartEditor" size="sm" text="Button" variant="primary" v-on:click="editor()">Push Event</b-btn>
+        <div id="hideInfo" class="userInfo">
+          <info ref="settingsModalRef"></info>
+        </div>
         <div>
           <GraphSlider ref="slider"></GraphSlider>
         </div>
@@ -43,11 +45,12 @@ import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import GraphTable from '@/components/GraphTable'
 import CalculateEquations from '@/components/CalculateEquations'
-import {eventHub} from '@/EventHub'
+import Info from '@/components/GraphChart/Info'
 
 export default {
   name: 'graphPage',
   components: {
+    Info,
     GraphSlider,
     GraphDisplay,
     GraphTable,
@@ -56,7 +59,6 @@ export default {
   data () {
     return {
       chart: null,
-      // instantiating datacollection with null
       datacollection: GraphDisplay.datacollection,
       milliLiterInput: '',
       dosageArray: [],
@@ -65,7 +67,8 @@ export default {
       BInput: '', // '20^2',
       MinResponse: CalculateEquations.MinResponse, // '0',
       MaxResponse: CalculateEquations.MaxResponse, // '150'
-      deviation: CalculateEquations.deviation
+      deviation: CalculateEquations.deviation,
+      checked: false // Info modal checkbox
     }
   },
   methods: {
@@ -78,7 +81,7 @@ export default {
           // TODO: DOM
           let milliLiter = this.milliLiterInput // * 0.001 // Convert to Milli Value
           let result = this.$refs.CalculateEquations.calculateHillDosageResponse(milliLiter)
-          console.log('Calculated Hill Langmuir Concentration from user input', result)
+          // console.log('Calculated Hill Langmuir Concentration from user input', result)
           this.passToTable(this.milliLiterInput)
           this.$refs.GraphDisplay.dosageArray.push(result)
           this.$refs.GraphDisplay.concentrationArray.push(milliLiter)
@@ -98,10 +101,6 @@ export default {
         chart.style.display = 'block'
         this.fillData()
       }
-    },
-    editor () {
-      let testvalue = '2'
-      eventHub.$emit('echo', testvalue)
     },
     passToTable (val) {
       let array = { amount: val, moles_added: val, concentration: val, response: val }
@@ -126,6 +125,9 @@ export default {
         this.fillData()
       }
     }
+  },
+  mounted () {
+    this.$refs.settingsModalRef.popUpModal()
   }
 }
 </script>
@@ -152,7 +154,7 @@ a {
   margin: 0 0;
   padding: 0 0;
 }
-#chartEditor {
+.userInfo {
   float: right;
 }
 </style>
