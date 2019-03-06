@@ -8,7 +8,7 @@
 
 <script>
 import axios from 'axios'
-const api = 'http://localhost:8002/'
+const api = 'http://localhost:8000/'
 export default {
   name: 'profile',
   data () {

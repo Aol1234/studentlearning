@@ -1,5 +1,6 @@
 <template>
   <div class="loginPage">
+    <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgo=">
     <h1>Login Page</h1>
     <p>Login Page</p>
     <!-- @submit handles any form of submission. -->
@@ -24,7 +25,9 @@
 <script>
 import firebase from 'firebase'
 import axios from 'axios'
-const api = 'http://localhost:8002/'
+export const api = 'http://localhost:8000/'
+export var sessionToken = ''
+export var headers = ''
 export default {
   name: 'LoginPage',
   data () {
@@ -56,11 +59,11 @@ export default {
     },
     authLogin () {
       firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function (idToken) {
-        console.log(idToken)
+        sessionToken = idToken
+        headers = {
+          Authorization: `Bearer  ${sessionToken}`
+        }
         axios.post(api + 'studentAuth/Login', JSON.stringify({idtoken: idToken}))
-          .then((response) => {
-            console.log('Reply: ', response)
-          })
           .catch(error => {
             console.log(error)
           })
@@ -72,10 +75,6 @@ export default {
       firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function (idToken) {
         console.log(idToken)
         axios.post(api + 'studentAuth/SignUp', JSON.stringify({idtoken: idToken}))
-          .then((response) => {
-            console.log('Reply: ', response)
-            this.$router.replace('dashboard')
-          })
           .catch(error => {
             console.log(error)
           })

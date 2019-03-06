@@ -1,9 +1,10 @@
 <template>
   <section class="container">
+    <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgo=">
     <h1 class="dashHeading">{{msg}}</h1>
     <p class="dashHeading">Links should be placed here to connect to the graphical input test and mcq</p>
     <b-card bg-variant="light"  >
-    <b-container fluid class="text-light text-center" >
+      <b-container fluid class="text-light text-center" >
       <b-row class="mb-3">
         <b-col><router-link :to="{ name: 'GraphPage' }">Graph</router-link></b-col>
         <b-col><router-link :to="{ name: 'ExampleMCQ' }">Example MCQ</router-link></b-col>

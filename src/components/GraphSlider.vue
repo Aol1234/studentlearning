@@ -3,21 +3,23 @@
   <b-btn v-b-modal.modal1>Settings</b-btn>
   <b-modal id="modal1" title="Settings">
     <p class="my-4">Settings</p>
-    <div v-show="value">
-      <b-card style="max-width: 15rem; float: right;" bg-variant="light">
-        <p>Number of DataPoints:</p>
-        <vue-slider ref="slider" v-model="value" v-bind="options"></vue-slider>
-      </b-card>
-    </div>
-    <b-col lg="5">
+    <b-col>
+      <div v-show="value">
+        <b-card style="max-width: 15rem; float: right;" bg-variant="light">
+          <p>Number of DataPoints:</p>
+          <vue-slider ref="slider" v-model="value" v-bind="options"></vue-slider>
+        </b-card>
+      </div>
+    </b-col>
+    <b-col style="max-width: 15rem; float: left;">
       <label class="mr-sm-4" for="B">B</label>
-      <b-form-input id="B" label="Email address:" v-model="BInput"  v-on.lazy:input='emitBInput(BInput)'></b-form-input>
+      <b-form-input id="B" label="Email address:" v-model="BInput" v-on.lazy:input='emitBInput(BInput)'></b-form-input>
       <label class="mr-sm-4" for="Min">Min Response</label>
       <b-form-input id="Min" v-model="MinResponse" v-on.lazy:input='emitMinResponse(MinResponse)'></b-form-input>
       <label class="mr-sm-4" for="Max">Max Response</label>
       <b-form-input id="Max" v-model="MaxResponse" v-on.lazy:input='emitMaxResponse(MaxResponse)'></b-form-input>
-      <label class="mr-sm-4" for="deviation">Deviation</label>
-      <b-form-input id="Max" v-model="deviation" v-on.lazy:input='emitdeviation(deviation)'></b-form-input>
+      <label class="mr-sm-4" for="Dev">Deviation</label>
+      <b-form-input id="Dev" v-model="deviation" v-on.lazy:input='emitdeviation(deviation)'></b-form-input>
     </b-col>
   </b-modal>
   </div>
