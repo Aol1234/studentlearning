@@ -46,7 +46,6 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import GraphTable from '@/components/GraphTable'
 import CalculateEquations from '@/components/CalculateEquations'
 import Info from '@/components/GraphChart/Info'
-
 export default {
   name: 'graphPage',
   components: {
@@ -125,9 +124,6 @@ export default {
         this.fillData()
       }
     }
-  },
-  mounted () {
-    this.$refs.settingsModalRef.popUpModal()
   }
 }
 </script>
