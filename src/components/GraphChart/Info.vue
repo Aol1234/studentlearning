@@ -9,31 +9,38 @@
       <div>
         <br>
         <h6><b>Settings</b></h6>
-        <p>The setting menu will display multiple options</p>
+        <b-card>
+          <p>The setting menu will display multiple options</p>
+          <p><b>B</b>: This is the point of Inflection</p>
+          <p><b>Min</b>: This is the minimum response</p>
+          <p><b>Max</b>: This is the maximum response</p>
+          <p><b>Deviation</b>: This is the amount of noise allowed as a percentage of total</p>
+          <p><b>Slider</b>: This indicates the total amount of data points on the graph</p>
+        </b-card>
         <h6><b>Graph</b></h6>
-        <p>The graph options</p>
+        <b-card>
+          <p>The graph options</p>
+        </b-card>
         <h6><b>Table</b></h6>
-        <p>The table will display</p>
+        <b-card>
+          <p>The table will display</p>
+        </b-card>
       </div>
     </b-modal>
   </div>
 </template>
 
 <script>
-import {sessionToken} from '../LoginPage'
+import {sessionToken, api} from '../LoginPage'
 import axios from 'axios'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
-const api = 'http://localhost:8000/'
 export default {
   name: 'Info',
   data () {
     return {
       GraphInfoModal: false, // Info modal checkbox
-      configs: {}, // UserConfigs,
-      headers: {
-        'Authorization': 'Bearer 700e9323-0140-4d49-b574-e8652fa433a'
-      }
+      configs: {} // UserConfigs,
     }
   },
   methods: {
@@ -41,8 +48,10 @@ export default {
       this.$refs.settingsModalRef.show()
     },
     popUpModal () {
-      if (this.configs === 0) {
+      if (this.configs['GraphInfoModal'] === 0) {
         this.showModal()
+      } else {
+        this.GraphInfoModal = true
       }
     }
   },
@@ -68,7 +77,6 @@ export default {
           headers: { 'Authorization': 'Bearer  ' + sessionToken }
         })
           .then((response) => {
-            console.log(response.config.data, this.headers)
             this.configs = request.GraphInfoModal
           })
           .catch(error => {
@@ -79,20 +87,21 @@ export default {
     }
   },
   created () {
-    console.log('Headers:', sessionToken)
-    axios({
-      method: 'get',
-      url: api + 'getUserPreferences',
-      headers: { 'Authorization': 'Bearer  ' + sessionToken }
-    })
-      .then((response) => {
-        console.log('Get Preference', response.config.data)
-        this.configs = response.config.data
+    if (this.configs['GraphInfoModal'] === undefined) {
+      axios({
+        method: 'get',
+        url: api + 'getUserPreferences',
+        headers: {'Authorization': 'Bearer  ' + sessionToken}
       })
-      .catch(error => {
-        console.log(error)
-        this.errored = true
-      })
+        .then((response) => {
+          this.configs = response.data
+          this.popUpModal()
+        })
+        .catch(error => {
+          console.log(error)
+          this.errored = true
+        })
+    }
   }
 }
 </script>
