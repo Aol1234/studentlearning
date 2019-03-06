@@ -33,23 +33,22 @@ export default {
       // result = 1 + (((max-min) * Math.pow(dosage, slope)) / (Math.pow(BInput, slope) + Math.pow(dosage, slope))
     },
     noise () {
-      let random = Math.random()
-      let deviation = this.deviation
-      let min = 1 - (random * deviation)
-      let max = 1 + (random * deviation)
-      let result = this.getRandomArbitrary(min, max)
-      console.log(result, min, max)
-      return result
+      if (this.deviation > 0) {
+        let random = Math.random()
+        let deviation = this.deviation
+        let min = 1 - (random * deviation)
+        let max = 1 + (random * deviation)
+        let result = this.getRandomArbitrary(min, max)
+        console.log(result, min, max)
+        return result
+      }
+      return 1
     },
     getRandomArbitrary (min, max) {
       return Math.random() * (max - min) + min
-    },
-    calling (value) {
-      console.log('Example of eventHub and listening Event', value, 'From GraphPage To CalculateEquations')
     }
   },
   created: function () {
-    this.eventHub.$on('echo', this.calling)
     this.eventHub.$on('BInput', BInput => { this.BInput = BInput })
     this.eventHub.$on('MinResponse', MinResponse => { this.MinResponse = MinResponse })
     this.eventHub.$on('MaxResponse', MaxResponse => { this.MaxResponse = MaxResponse })
