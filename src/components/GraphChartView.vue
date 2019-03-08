@@ -39,12 +39,12 @@
 
 <script>
 // <CalculateEquations :test="preciousThing"></CalculateEquations>
-import GraphDisplay from '@/components/GraphDisplay'
-import GraphSlider from '@/components/GraphSlider'
+import GraphDisplay from '@/components/GraphChart/GraphDisplay'
+import GraphSlider from '@/components/GraphChart/GraphSlider'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
-import GraphTable from '@/components/GraphTable'
-import CalculateEquations from '@/components/CalculateEquations'
+import GraphTable from '@/components/GraphChart/GraphTable'
+import CalculateEquations from '@/components/GraphChart/CalculateEquations'
 import Info from '@/components/GraphChart/Info'
 export default {
   name: 'graphPage',

@@ -2,7 +2,7 @@
   <reactive :chart-data="datacollection"></reactive>
 </template>
 <script>
-import Reactive from '@/components/Reactive'
+import Reactive from '@/components/GraphChart/Reactive'
 export default {
   name: 'GraphDisplay',
   components: {

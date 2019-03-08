@@ -11,7 +11,7 @@
         <h6><b>Settings</b></h6>
         <b-card>
           <p>The setting menu will display multiple options</p>
-          <p><b>B</b>: This is the point of Inflection</p>
+          <p><b>B</b>: This is the point of Inflection</p>run
           <p><b>Min</b>: This is the minimum response</p>
           <p><b>Max</b>: This is the maximum response</p>
           <p><b>Deviation</b>: This is the amount of noise allowed as a percentage of total</p>

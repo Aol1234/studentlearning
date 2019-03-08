@@ -5,9 +5,10 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import LoginPage from '@/components/LoginPage'
 import About from '@/components/About'
 import DashBoard from '@/components/DashBoard'
-import GraphPage from '@/components/GraphPage'
-import GraphDisplay from '@/components/GraphDisplay'
-import CalculateEquations from '@/components/CalculateEquations'
+import GraphChartView from '@/components/GraphChartView'
+import McqCreatorView from '@/components/McqCreatorView'
+import GraphDisplay from '@/components/GraphChart/GraphDisplay'
+import CalculateEquations from '@/components/GraphChart/CalculateEquations'
 import Profile from '@/components/Profile'
 import ExampleMCQ from '@/components/ExampleMCQ'
 import BootstrapVue from 'bootstrap-vue'
@@ -51,8 +52,8 @@ export default new Router({
     },
     {
       path: '/graphPage',
-      name: 'GraphPage',
-      component: GraphPage,
+      name: 'GraphChartView',
+      component: GraphChartView,
       children: [
         {
           path: '/graphPage/graphDisplay',
@@ -69,6 +70,11 @@ export default new Router({
       path: '/MCQ',
       name: 'ExampleMCQ',
       component: ExampleMCQ
+    },
+    {
+      path: '/mcqCreator',
+      name: 'McqCreatorView',
+      component: McqCreatorView
     }
   ]
 })
