@@ -17,7 +17,7 @@
   </div>
 </template>
 <script>
-import {sessionToken, api} from '../LoginPage'
+import {sessionToken, api} from '../LoginView'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import axios from 'axios'
