@@ -1,24 +1,24 @@
 <template>
-  <div class="loginPage">
-    <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgo=">
-    <h1>Login Page</h1>
-    <p>Login Page</p>
-    <!-- @submit handles any form of submission. -->
-    <!-- .prevent keeps the event from bubbling around and doing anything else. -->
-    <form>
-      <label>
-        Email:
-        <input type="email" v-model="user.email"/>
-      </label>
-      <label>
-        Password:
-        <input type="password" v-model="user.password"/>
-      </label>
-      <button @click="SignUp">Sign-up</button>
-      <button @click="Login">Login</button>
-    </form>
-
-    <p>If you click the "Submit" button, the form-data will be sent to a page called "/action_page.php".</p>
+  <div>
+    <div>
+      <h1 id="Header">Login Page</h1>
+    </div>
+    <div class="loginPage">
+      <b-form-group id="loginForm">
+        <div class="EmailField">
+          <label for="email" class="loginInputLabel">Email:</label>
+          <b-form-input id="email" type="email" v-model="user.email"/>
+        </div>
+        <div class="PassField">
+          <label for="password" class="loginInputLabel">Password:</label>
+          <b-form-input id="password" type="password" v-model="user.password"/>
+        </div>
+        <div class="Buttons">
+          <b-button @click="SignUp">Sign-up</b-button>
+          <b-button @click="Login">Login</b-button>
+        </div>
+      </b-form-group>
+    </div>
   </div>
 </template  >
 
@@ -97,5 +97,40 @@ export default {
 </script>
 
 <style scoped>
-
+.loginPage{
+  margin-left: 20vw;
+  margin-right: 20vw;
+}
+#loginForm{
+  border-style: solid;
+  border-width: 0.1vw;
+  border-color: #5a6268;
+  border-radius: 0.5vw;
+}
+.loginInputLabel{
+}
+.EmailField{
+  padding-top: 2vw;
+  width: 50%;
+  text-align: center;
+  margin: auto;
+}
+.PassField{
+  padding-top: 2vw;
+  margin: auto;
+  text-align: center;
+  width: 50%;
+}
+.inputField{
+  width: 40%;
+}
+.Buttons{
+  margin-top: 3vw;
+  margin-left: 40%;
+}
+#Header{
+  font-size: 6vw;
+  text-align: center;
+  margin-bottom: 5vh;
+}
 </style>
