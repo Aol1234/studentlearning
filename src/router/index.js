@@ -7,10 +7,14 @@ import DashBoard from '@/components/DashBoard'
 import GraphChartView from '@/components/GraphChartView'
 import McqCreatorView from '@/components/McqCreatorView'
 import LoginView from '@/components/LoginView'
-import Profile from '@/components/Profile'
+import ProfileView from '@/components/ProfileView'
 import MCQView from '@/components/MCQView'
+import CreateGroupView from '@/components/CreateGroupView'
+import GroupView from '@/components/GroupView'
 import GraphDisplay from '@/components/GraphChart/GraphDisplay'
 import CalculateEquations from '@/components/GraphChart/CalculateEquations'
+import McqQuestions from '@/components/McqCreator/McqQuestions'
+import ProfileGraph from '@/components/Profile/ProfileGraph'
 import BootstrapVue from 'bootstrap-vue'
 import VueKatex from 'vue-katex'
 import 'katex/dist/katex.min.css'
@@ -42,11 +46,18 @@ export default new Router({
           path: '/dashboard/about',
           name: 'About',
           component: About
-        },
+        }
+      ]
+    },
+    {
+      path: '/dashboard/ProfileView',
+      name: 'ProfileView',
+      component: ProfileView,
+      children: [
         {
-          path: '/dashboard/profile',
-          name: 'Profile',
-          component: Profile
+          path: '/profile/ProfileGraph',
+          name: 'ProfileGraph',
+          component: ProfileGraph
         }
       ]
     },
@@ -74,7 +85,24 @@ export default new Router({
     {
       path: '/mcqCreator',
       name: 'McqCreatorView',
-      component: McqCreatorView
+      component: McqCreatorView,
+      children: [
+        {
+          path: '/McqQuestions',
+          name: 'McqQuestions',
+          component: McqQuestions
+        }
+      ]
+    },
+    {
+      path: '/createGroupView',
+      name: 'CreateGroupView',
+      component: CreateGroupView
+    },
+    {
+      path: '/groupView',
+      name: 'GroupView',
+      component: GroupView
     }
   ]
 })

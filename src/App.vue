@@ -1,9 +1,9 @@
 <template>
-  <div id="app">
-      <router-link :to="{ name: 'DashBoard' }">Dashboard</router-link>
-      <router-link :to="{ name: 'Profile' }">Profile</router-link>
-    <router-view/>
-  </div>
+    <div>
+      <div class="app">
+      </div>
+      <router-view/>
+    </div>
 </template>
 
 <script>
@@ -13,9 +13,14 @@ export default {
 </script>
 
 <style>
-#navbar {
-float: top;
-text-align: center;
-
+.app {
+  background-color: white;
+  border-width: 0vw;
+  border-bottom-width: 0.2vw;
+  border-left-width: 0.1vw;
+  border-right-width: 0.1vw;
+  border-radius: 0.25vw;
+  border-style: solid;
+  border-color: #4938f8;
 }
 </style>
