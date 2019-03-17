@@ -15,10 +15,6 @@ export default {
       dosageArray: []
     }
   },
-  created () {
-    // anytime the vue instance is created, call the fillData() function.
-    // this.fillData()
-  },
   methods: {
     fillData () {
       this.datacollection = {

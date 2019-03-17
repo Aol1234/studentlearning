@@ -13,7 +13,7 @@
     </b-col>
     <b-col style="max-width: 15rem; float: left;">
       <label class="mr-sm-4" for="B">B</label>
-      <b-form-input id="B" label="Email address:" v-model="BInput" v-on.lazy:input='emitBInput(BInput)'></b-form-input>
+      <b-form-input id="B" v-model="BInput" v-on.lazy:input='emitBInput(BInput)'></b-form-input>
       <label class="mr-sm-4" for="Min">Min Response</label>
       <b-form-input id="Min" v-model="MinResponse" v-on.lazy:input='emitMinResponse(MinResponse)'></b-form-input>
       <label class="mr-sm-4" for="Max">Max Response</label>
@@ -34,7 +34,6 @@ export default {
   components: {
     vueSlider
   },
-  // FIXME: Needs to refresh when modal is open, does'nt refresh until interaction with slider
   watch: {
     deep: true,
     value (val) {

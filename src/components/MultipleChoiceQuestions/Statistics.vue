@@ -6,13 +6,15 @@
 import {eventHub} from '@/EventHub'
 export default {
   name: 'Statistics',
-  props: ['answer'],
+  props: ['chosenAnswer'],
   watch: {
-    answer: {
+    chosenAnswer: {
       handler: function (Answer) {
-        eventHub.$emit('Update Answer', Answer)
+        // console.log('Answer', Answer)
+        eventHub.$emit('Update Answer Value', Answer)
         eventHub.$emit('Update Answer Count', Answer['Id'])
         eventHub.$emit('Update Answer time', Answer)
+        eventHub.$emit('Update Answer Result', Answer)
       },
       deep: true
     }
@@ -22,7 +24,6 @@ export default {
       timeSinceLastQuestionAnswered: 0 // time since last question answered
     }
   }
-
 }
 </script>
 
