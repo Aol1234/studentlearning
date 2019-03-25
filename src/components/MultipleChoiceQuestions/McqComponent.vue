@@ -1,6 +1,5 @@
 <template>
-  <div>
-    {{Answers}}
+  <div class="Main MCQ">
     <div v-if="rendering === true" v-for="(n, index) in this.numberOfQuestions" :key="index">
      <b-card bg-variant="light">
        {{question[index]}}
@@ -13,7 +12,8 @@
        <Statistics :chosenAnswer="chosenAnswers[index]"></Statistics>
      </b-card>
     </div>
-    <button v-on:click="result">Result</button>
+    <b-button id="Publish" v-on:click="result">Result</b-button>
+    {{Answers}}
   </div>
 </template>
 <script>
@@ -117,5 +117,13 @@ export default {
 </script>
 
 <style scoped>
-
+#Publish{
+  margin: 3vw 38vw;
+  padding: 2vw;
+  border-radius: 10vw;
+  text-align: center;
+}
+.MCQ {
+  margin-top: 2vw;
+}
 </style>

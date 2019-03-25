@@ -18,9 +18,8 @@
               <b-form-input v-model="milliLiterInput"></b-form-input>
               <b-input-group-append>
                 <b-btn size="sm" text="Button" variant="primary" v-on:click="submitEquationInput()">Submit</b-btn>
-                <b-btn size="sm" text="Button" variant="primary" v-on:click="hide()">Calculate</b-btn>
-                <b-btn size="sm" text="Button" variant="primary" v-on:click="sample()"> Test!!! </b-btn>
-                <b-button @click="SendData()">Send Data</b-button>
+                <b-btn size="sm" text="Button" variant="primary" @click="Calculate">Calculate</b-btn>
+                <b-button @click="SendData">Send Data</b-button>
               </b-input-group-append>
             </b-input-group>
           </b-col>
@@ -82,13 +81,12 @@ export default {
         alert('This is not a number')
       } else {
         if ((this.dosageArray.length + 1) <= this.$refs.slider.value) {
-          this.dosageArray.push(this.milliLiterInput)
-          let milliLiter = this.milliLiterInput // * 0.001 // Convert to Milli Value
-          let result = this.$refs.CalculateEquations.calculateHillDosageResponse(milliLiter)
-          // console.log('Calculated Hill Langmuir Concentration from user input', result)
-          this.passToTable(this.milliLiterInput)
-          this.$refs.GraphDisplay.dosageArray.push(result)
-          this.$refs.GraphDisplay.concentrationArray.push(milliLiter)
+          let milliLiter = this.milliLiterInput * 0.001 // Convert to Milli Value
+          let concentration = this.$refs.CalculateEquations.calculateHillDosageResponse(milliLiter)
+          let response = this.$refs.CalculateEquations.calculateHillDosageResponse(milliLiter)
+          this.passToTable([this.milliLiterInput, response, concentration])
+          this.dosageArray.push(response)
+          this.concentrationArray.push(milliLiter)
           eventHub.$emit('User inputted new value for graph', milliLiter)
           this.milliLiterInput = '' // Clears user input
         }
@@ -97,8 +95,10 @@ export default {
     fillData () {
       this.$refs.GraphDisplay.fillData()
     },
-    hide () {
+    Calculate () {
       let chart = document.getElementById('hideChart')
+      this.$refs.GraphDisplay.concentrationArray = this.concentrationArray
+      this.$refs.GraphDisplay.dosageArray = this.dosageArray
       if (chart.style.display === 'block') {
         this.fillData()
       } else {
@@ -107,7 +107,7 @@ export default {
       }
     },
     passToTable (val) {
-      let array = { amount: val, moles_added: val, concentration: val, response: val }
+      let array = { amount: val[0], moles_added: val[0], concentration: val[2], response: val[1] }
       this.$refs.GraphTable.items.push(array)
     },
     SendData () {
@@ -123,26 +123,7 @@ export default {
         })
         .catch(error => {
           console.log(error)
-          this.errored = true
         })
-    },
-    sample () {
-      let dosage = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 5096, 10192, 20384, 40768, 81536, 163072, 326144, 652288
-      ]
-      let temp = []
-      for (var x in dosage) {
-        var result = this.$refs.CalculateEquations.calculateHillDosageResponse((dosage[x] * 0.01))
-        temp.push(result)
-      }
-      this.$refs.GraphDisplay.dosageArray = temp
-      this.$refs.GraphDisplay.concentrationArray = dosage
-      let chart = document.getElementById('hideChart')
-      if (chart.style.display === 'block') {
-        this.fillData()
-      } else {
-        chart.style.display = 'block'
-        this.fillData()
-      }
     }
   }
 }
@@ -163,8 +144,6 @@ a {
 }
 #hideChart {
   display:none
-}
-#sliderContainer {
 }
 #test {
   margin: 0 0;

@@ -1,8 +1,8 @@
 <template>
   <div>
     <div class="app">
-      <router-link :to="{ name: 'DashBoard' }">Dashboard</router-link>
-      <router-link :to="{ name: 'ProfileView' }">Profile</router-link>
+      <router-link class="link" :to="{ name: 'DashBoard' }">Dashboard</router-link>
+      <router-link class="link" :to="{ name: 'ProfileView' }">Profile</router-link>
     </div>
     <router-view/>
   </div>
@@ -16,13 +16,17 @@ export default {
 
 <style>
   .app {
-    background-color: white;
-    border-width: 0vw;
+    background-color: #4938f8;
+    color: white;
     border-bottom-width: 0.2vw;
-    border-left-width: 0.1vw;
-    border-right-width: 0.1vw;
-    border-radius: 0.25vw;
+    border-radius: 0.1vw;
     border-style: solid;
     border-color: #4938f8;
+  }
+  .link{
+    color: white;
+  }
+  .link:hover{
+    color: white;
   }
 </style>

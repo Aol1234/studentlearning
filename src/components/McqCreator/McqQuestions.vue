@@ -2,7 +2,7 @@
     <div>
       <b-card>
         <h3>Questions</h3>
-        <div v-for="(questionId, index) in this.questionIndex" :key="index">Question: {{questionId}}
+        <div v-for="(questionId, index) in this.questionIndex" :key="index">Question: {{questionId + 1}}
           <b-card>
             <div class="form-row">
                 <label class="form col-form-label" for="questionIndex[index]">Title of Question</label>
@@ -12,7 +12,7 @@
             <McqAnswers :questionId="questionId"></McqAnswers>
           </b-card>
         </div>
-        <button @click="AddQuestion()">+</button>
+        <b-button @click="AddQuestion()">+</b-button>
       </b-card>
     </div>
 </template>
@@ -46,20 +46,21 @@ export default {
       let QId = QuestionIdAndQuestion[0]
       this.questionList[QId]['Id'] = QId
       this.questionList[QId]['Question'] = QuestionIdAndQuestion[1]
-      console.log('Updated Question', this.questionList[QId])
     },
     updateAnswer (QuestionIdAndAnswer) {
       let questionId = QuestionIdAndAnswer[0]
       this.questionList[questionId]['Answers'] = QuestionIdAndAnswer[1]
       this.questionList[questionId]['Id'] = questionId
       this.questionList[questionId]['Question'] = this.question[questionId]
-      console.log('Updated Question', this.questionList[questionId])
+      for (let index = 0; index < this.questionList[questionId]['Answers'].length; index++) {
+        if (this.questionList[questionId]['Answers'][index]['result'] > 0) {
+          this.questionList[questionId]['Answers'][index]['result'] = this.questionList[questionId]['Answers'].length
+        }
+      }
     },
     publish () {
       eventHub.$emit('Collect Questions', this.questionList)
     },
-    // FIXME: CorrectAnswer result value does not update if new answer created after the correct answer created
-    // Create a for loop in publish that updates number of answers to update result value
     setCorrectAnswer (QuestionIdAndCorrectAnswerValue) {
       let questionId = QuestionIdAndCorrectAnswerValue[0]
       let numberOfAnswers = this.questionList[questionId]['Answers'].length

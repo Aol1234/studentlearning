@@ -9,9 +9,9 @@
           <b-row>
             <b-col>
               <h5>Best Topic:</h5>
-              <p>Python</p>
-              <h5>Knowledge</h5>
-              <p>V.High</p>
+              <p>{{bestTopic['TopicName']}}</p>
+              <h5>Avg Result</h5>
+              <p>{{bestTopic['AvgResult']}}</p>
             </b-col>
           </b-row>
         </b-container>
@@ -37,15 +37,15 @@
                 </b-col>
                 <b-col>
                   <h5>Monthly</h5>
-                  <p>Probability to answer Correctly: {{weeklyAnalysis[index]['WeeklyMcqAnalysisResults'][i]['avg_result'] * 100}}%</p>
-                  <p>Time taken to Answer Question: {{weeklyAnalysis[index]['WeeklyMcqAnalysisResults'][i]['avg_time']}}</p>
-                  <p>Confidence in Answer: {{weeklyAnalysis[index]['WeeklyMcqAnalysisResults'][i]['AvgConfidenceString']}}</p>
+                  <p>Probability to answer Correctly: {{monthlyAnalysis[index]['MonthlyMcqAnalysisResults'][i]['avg_result'] * 100}}%</p>
+                  <p>Time taken to Answer Question: {{monthlyAnalysis[index]['MonthlyMcqAnalysisResults'][i]['avg_time']}}</p>
+                  <p>Confidence in Answer: {{monthlyAnalysis[index]['MonthlyMcqAnalysisResults'][i]['AvgConfidenceString']}}</p>
                 </b-col>
                 <b-col>
                   <h5>Yearly</h5>
-                  <p>Probability to answer Correctly: {{weeklyAnalysis[index]['WeeklyMcqAnalysisResults'][i]['avg_result'] * 100}}%</p>
-                  <p>Time taken to Answer Question: {{weeklyAnalysis[index]['WeeklyMcqAnalysisResults'][i]['avg_time']}}</p>
-                  <p>Confidence in Answer: {{weeklyAnalysis[index]['WeeklyMcqAnalysisResults'][i]['AvgConfidenceString']}}</p>
+                  <p>Probability to answer Correctly: {{yearlyAnalysis[index]['YearlyMcqAnalysisResults'][i]['avg_result'] * 100}}%</p>
+                  <p>Time taken to Answer Question: {{yearlyAnalysis[index]['YearlyMcqAnalysisResults'][i]['avg_time']}}</p>
+                  <p>Confidence in Answer: {{yearlyAnalysis[index]['YearlyMcqAnalysisResults'][i]['AvgConfidenceString']}}</p>
                 </b-col>
               </b-row>
             </b-card>
@@ -71,13 +71,21 @@ export default {
       weeklyAnalysis: [],
       monthlyAnalysis: [],
       yearlyAnalysis: [],
+      McqTopics: [],
+      bestTopic: [],
       results: [],
       rendering: false
     }
   },
   methods: {
-    formattingQuestions () {
-
+    getBestTopic () {
+      for (let index = 0; index < this.McqTopics.length; index++) {
+        if (this.McqTopics.length > 1 && this.McqTopics[index]['AvgResult'] > this.McqTopics[index - 1]['AvgResult']) {
+          this.bestTopic = this.McqTopics[index]
+        } else if (this.McqTopics.length === 1) {
+          this.bestTopic = this.McqTopics[index]
+        }
+      }
     },
     formatDate (val) {
       return moment(String(val)).format('DD/MM/YYYY hh:mm')
@@ -121,6 +129,8 @@ export default {
         this.monthlyAnalysis = this.body['Monthly']
         this.yearlyAnalysis = this.body['Yearly']
         this.results = this.body['Results']
+        this.McqTopics = this.body['Topics']
+        this.getBestTopic()
       })
       .catch(error => {
         console.log(error)

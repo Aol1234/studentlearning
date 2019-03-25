@@ -2,9 +2,8 @@
   <div>
     <Header></Header>
     <section class="container">
-      <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgo=">
       <h1 class="dashHeading">{{msg}}</h1>
-      <p class="dashHeading">Options provided below</p>
+      <p style="text-align: center">Options provided below</p>
       <b-card bg-variant="light"  >
         <b-container fluid class="text-light text-center" >
           <b-row class="mb-5">
@@ -43,9 +42,11 @@ export default {
 <style scoped>
 .dashHeading {
   text-align: center;
+  color: white;
+  padding-top: 1vw;
+  padding-bottom: 2vw;
+  border-bottom-right-radius: 30vw;
+  border-bottom-left-radius: 30vw;
+  background-color: #4938f8;
 }
-.dashSquareRight {
-  float: Right;
-}
-
 </style>

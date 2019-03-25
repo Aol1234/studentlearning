@@ -1,10 +1,10 @@
 <template>
     <div>
       <Header></Header>
-      <h1>Create a Multiple Choice Questionnaire</h1>
+      <h2 class="Header">Create a Multiple Choice Questionnaire</h2>
       <McqDetails></McqDetails>
       <McqQuestions></McqQuestions>
-      <button @click="Publish">Publish</button>
+      <b-button @click="Publish">Publish</b-button>
     </div>
 </template>
 
@@ -69,5 +69,14 @@ export default {
 </script>
 
 <style scoped>
-
+  .Header{
+    text-align: center;
+    color: white;
+    padding-bottom: 2vw;
+    margin-right: 10vw;
+    margin-left: 10vw;
+    border-bottom-right-radius: 30vw;
+    border-bottom-left-radius: 30vw;
+    background-color: #4938f8;
+  }
 </style>

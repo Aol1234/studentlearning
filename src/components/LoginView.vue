@@ -25,7 +25,7 @@
 <script>
 import firebase from 'firebase'
 import axios from 'axios'
-export const api = 'http://localhost:8000/'
+export const api = 'https://studentlearningserver.herokuapp.com/:8000/'
 export var sessionToken = ''
 export var headers = ''
 export default {
@@ -73,7 +73,10 @@ export default {
     },
     authSignUp () {
       firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function (idToken) {
-        console.log(idToken)
+        sessionToken = idToken
+        headers = {
+          Authorization: `Bearer  ${sessionToken}`
+        }
         axios.post(api + 'studentAuth/SignUp', JSON.stringify({idtoken: idToken}))
           .catch(error => {
             console.log(error)
@@ -81,16 +84,6 @@ export default {
       }).catch(function (error) {
         console.log(error)
       })
-    },
-    authServer (idToken) {
-      axios.post(api + 'studentAuth', JSON.stringify({idtoken: idToken}))
-        .then((response) => {
-          // console.log(JSON.parse(response.data))
-          console.log('Reply: ', response)
-        })
-        .catch(error => {
-          console.log(error)
-        })
     }
   }
 }
@@ -98,6 +91,7 @@ export default {
 
 <style scoped>
 .loginPage{
+  margin-top: 3vw;
   margin-left: 20vw;
   margin-right: 20vw;
 }
@@ -127,10 +121,17 @@ export default {
 .Buttons{
   margin-top: 3vw;
   margin-left: 40%;
+  margin-bottom: 2vw;
 }
 #Header{
   font-size: 6vw;
   text-align: center;
-  margin-bottom: 5vh;
+  color: white;
+  //margin-right: 20vw;
+  //margin-left: 20vw;
+  padding-bottom: 2vw;
+  border-bottom-right-radius: 30vw;
+  border-bottom-left-radius: 30vw;
+  background-color: #4938f8;
 }
 </style>

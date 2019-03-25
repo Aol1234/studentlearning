@@ -2,18 +2,17 @@
   <div>
     <Header></Header>
     <div v-if="InitialRender === true">
-      <h2>Select an Mcq to test against</h2>
+      <h2 class="Header">A selection of mcq's are provided</h2>
     </div>
-    <div v-if="rendered === true">
+    <div class="Main" v-if="rendered === true">
       <div v-if="Questionnaires.length !== 0">
-        <p>Testing {{Questionnaires}}</p>
         <div v-for="(mcq, index) in Questionnaires" :key="index" :value="mcq">
           <b-card>
-            {{mcq['Name']}}
-            <b-card>
+            <div class="Title">{{mcq['Name']}}</div>
+            <b-card class="Desc">
               {{mcq['Desc']}}
+              <b-button id="MCQPopulate" @click="populate(mcq)">Populate</b-button>
             </b-card>
-            <button @click="populate(mcq)">Populate</button>
           </b-card>
         </div>
       </div>
@@ -37,7 +36,6 @@ export default {
       rendered: true,
       mcq: '',
       response: '',
-      html: (api + 'post'),
       api: api,
       InitialRender: true,
       McqRender: false
@@ -48,16 +46,13 @@ export default {
       axios({
         method: 'get',
         url: api + 'getMcqs',
-        // data: JSON.stringify(result), // Get mcq associated with mcq_id
         headers: { 'Authorization': 'Bearer  ' + sessionToken }
       })
         .then((response) => {
           this.Questionnaires = response.data
-          console.log('Mcqs ', this.Questionnaires)
         })
         .catch(error => {
           console.log(error)
-          this.errored = true
         })
     },
     populate (mcq) {
@@ -69,12 +64,10 @@ export default {
         headers: { 'Authorization': 'Bearer  ' + sessionToken }
       })
         .then((response) => {
-          console.log('Response', response)
           eventHub.$emit('Populate Exam', response)
         })
         .catch(error => {
           console.log(error)
-          this.errored = true
         })
       this.rendered = false
       this.McqRender = true
@@ -82,13 +75,57 @@ export default {
   },
   created () {
     this.getMcqs()
-    this.rendered = true
-    // this.InitialRender = true
-    // this.McqRender = false
+    this.rendered = true // Renders only after Mcqs are retrieved from the server
   }
 }
 </script>
 
 <style scoped>
-
+.Main{
+  margin-left: 10vw;
+  margin-right: 10vw;
+  border-right-width: 0.2vw;
+  border-left-width: 0.2vw;
+  border-radius: 0.35vw;
+  border-color: #4938f8;
+  border-style: solid;
+}
+.Header{
+  text-align: center;
+  padding-top: 2vw;
+  padding-bottom: 2vw;
+  margin-bottom: -0.2vw;
+  margin-left: 6vw;
+  margin-right: 6vw;
+  color: white;
+  border-bottom-right-radius: 30vw;
+  border-bottom-left-radius: 30vw;
+  background-color: #4938f8;
+}
+.Title{
+  text-align: center;
+  margin-right: 45vw;
+  margin-bottom: -0.18vw;
+  color: white;
+  border-top-right-radius: 0.35vw;
+  border-top-left-radius: 0.35vw;
+  border-bottom-right-radius: 0.35vw;
+  background-color: #4938f8;
+}
+.Desc{
+  border-bottom-left-radius: 0.4vw;
+  border-bottom-right-radius: 0.4vw;
+  border-top-right-radius: 0.4vw;
+  border-color: #4938f8;
+  border-width: 0.2vw;
+  border-style: solid;
+}
+#MCQPopulate{
+  float: right;
+  padding-top: 1.75vw;
+  padding-bottom: 1.75vw;
+  margin-right: -2.15%;
+  border-top-right-radius: 0.1vw;
+  border-bottom-right-radius: 0.1vw;
+}
 </style>

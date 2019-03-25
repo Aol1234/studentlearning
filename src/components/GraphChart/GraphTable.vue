@@ -10,7 +10,8 @@
              :foot-clone="footClone"
              :items="items"
              :fields="fields">
-      <span slot="moles_added" slot-scope="data" v-html='formatter(data.value)'></span>
+      <span slot="moles_added" slot-scope="data" v-html='formatMoles(data.value)'></span>
+      <span slot="concentration" slot-scope="data" v-html='formatConcentration(data.value)'></span>
     </b-table>
   </div>
 </template>
@@ -39,22 +40,42 @@ export default {
       hover: true,
       dark: false,
       fixed: false,
-      footClone: true
+      footClone: true,
+      exponential: 11
     }
   },
   methods: {
-    // FIXME: Function called twice for each element
-    formatter (data) {
+    formatMoles (data) {
       if (typeof data === 'string') {
-        var html = katex.renderToString('\\val*10^{-8}', {
+        let html = katex.renderToString('\\val*10^{-' + this.exponential + '}', {
           throwOnError: false,
           macros: {
             '\\val': data
-            // '\\power': powerOf
           }
         })
         return html
       }
+    },
+    formatConcentration (data) {
+      let decimalCount = this.precision(data)
+      // console.log(decimalCount, data)
+      let html = katex.renderToString('\\val*10^{-' + this.exponential + '}', {
+        throwOnError: false,
+        macros: {
+          '\\val': decimalCount.toString()
+        }
+      })
+      return html
+    },
+    precision (a) { //  Source: https://stackoverflow.com/a/27865285
+      if (!isFinite(a)) return 0
+      let e = 1
+      let p = 0
+      while (Math.round(a * e) / e !== a) {
+        e *= 10
+        p++
+      }
+      return p
     }
   }
 }

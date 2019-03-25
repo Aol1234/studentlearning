@@ -2,14 +2,14 @@
     <div>
       <div v-for="(answerId, index) in this.answerIndex" :key="index">
         <div class="form-row">
-          <label class="form col-form-label" for="answerIndex[index]">Answer: {{answerId}}</label>
+          <label class="form col-form-label" for="answerIndex[index]">Answer: {{answerId + 1}}</label>
           <label>
             <input type="radio" v-model="chosenAnswer" v-bind:value="answerId">
           </label>
           <input class="form-control col-sm-8" type="text" id="answerIndex[index]" v-model.lazy="answers[index]['text']">
         </div>
       </div>
-      <button v-if="answerNumber < 10" @click="AddAnswers">+</button>
+      <b-button v-if="answerNumber < 10" @click="AddAnswers">+</b-button>
       </div>
 </template>
 
@@ -38,7 +38,7 @@ export default {
     formattingAnswer (i) {
       let answer = {value: i, text: '', result: 0}
       this.answers.push(answer)
-      console.log('Updated Answer', answer)
+      // console.log('Updated Answer', answer)
     }
   },
   watch: {
