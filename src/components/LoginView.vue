@@ -25,7 +25,7 @@
 <script>
 import firebase from 'firebase'
 import axios from 'axios'
-export const api = 'https://studentlearningserver.herokuapp.com/:8000/'
+export const api = 'https://studentlearningserver.herokuapp.com/' // 'http://localhost:8000/'
 export var sessionToken = ''
 export var headers = ''
 export default {

@@ -19,7 +19,7 @@
               <b-input-group-append>
                 <b-btn size="sm" text="Button" variant="primary" v-on:click="submitEquationInput()">Submit</b-btn>
                 <b-btn size="sm" text="Button" variant="primary" @click="Calculate">Calculate</b-btn>
-                <b-button @click="SendData">Send Data</b-button>
+                <b-button @click="sample">Sample</b-button>
               </b-input-group-append>
             </b-input-group>
           </b-col>
@@ -124,6 +124,24 @@ export default {
         .catch(error => {
           console.log(error)
         })
+    },
+    sample () {
+      let dosage = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 5096, 10192, 20384, 40768, 81536, 163072, 326144, 652288
+      ]
+      let temp = []
+      for (var x in dosage) {
+        var result = this.$refs.CalculateEquations.calculateHillDosageResponse((dosage[x] * 0.01))
+        temp.push(result)
+      }
+      this.$refs.GraphDisplay.dosageArray = temp
+      this.$refs.GraphDisplay.concentrationArray = dosage
+      let chart = document.getElementById('hideChart')
+      if (chart.style.display === 'block') {
+        this.fillData()
+      } else {
+        chart.style.display = 'block'
+        this.fillData()
+      }
     }
   }
 }

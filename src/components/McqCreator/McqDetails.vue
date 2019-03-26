@@ -31,8 +31,9 @@ export default {
   data () {
     return {
       topics: [
-        'Security',
-        'Python'
+        'Python',
+        'History',
+        'Geography'
       ],
       numberOfQuestions: 0, // placeholder for watch method
       topic: '', // placeholder for watch method

@@ -41,7 +41,6 @@ export default {
         Topic: this.Topic,
         McqQuestions: this.Questions
       }
-      console.log(mcq)
       axios({
         method: 'post',
         url: api + 'publishMcq',
@@ -49,7 +48,7 @@ export default {
         headers: { 'Authorization': 'Bearer  ' + sessionToken }
       })
         .then((response) => {
-          console.log(response)
+          this.$router.replace('dashboard')
         })
         .catch(error => {
           console.log(error)

@@ -13,7 +13,6 @@
      </b-card>
     </div>
     <b-button id="Publish" v-on:click="result">Result</b-button>
-    {{Answers}}
   </div>
 </template>
 <script>
@@ -66,7 +65,6 @@ export default {
         'UserId': this.UserId, // Placeholder value, not shared with client
         'McqQuestionResult': this.Answers
       }
-      console.log(result)
       axios({
         method: 'post',
         url: api + ':ID/:mcqID/result',
@@ -74,6 +72,7 @@ export default {
         headers: { 'Authorization': 'Bearer  ' + sessionToken }
       })
         .then((response) => {
+          this.$router.replace('dashboard')
         })
         .catch(error => {
           console.log(error)

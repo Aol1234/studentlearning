@@ -1,7 +1,9 @@
 <template>
+  <div>
     <b-button @click="week">W</b-button>
     <b-button @click="month">M</b-button>
     <b-button @click="year">Y</b-button>
+  </div>
 </template>
 
 <script>

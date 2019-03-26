@@ -3,7 +3,8 @@
     <Header></Header>
     <div class="Header">
       <h1 class="Profile">Profile</h1>
-      <div>
+      <b-button @click="getProfile">Populate</b-button>
+      <div v-if="rendering === true">
         <b-container>
           <h2>General Details</h2>
           <b-row>
@@ -11,12 +12,13 @@
               <h5>Best Topic:</h5>
               <p>{{bestTopic['TopicName']}}</p>
               <h5>Avg Result</h5>
-              <p>{{bestTopic['AvgResult']}}</p>
+              <p>{{formatPercentage(bestTopic['AvgResult'])}}%</p>
             </b-col>
           </b-row>
         </b-container>
       </div>
-      <div v-if="rendering === true" v-for="(question, index) in this.questions" :key="index">
+      {{this.questions.length}}
+      <div v-if="rendering === true" v-for="(question, index) in questions" :key="index">
         <b-card class="Mcq" >
           <div class="McqHeader">
             <h2 class="McqTitle">Title: {{question['Name']}}</h2>
@@ -25,7 +27,7 @@
             <p>Topic: {{question['Topic']}}</p>
             <p>Last Tried: {{formatDate(weeklyAnalysis[index]['LastModified'])}}</p>
           </div>
-          <div v-for="(q, i) in question['McqQuestions']" :key="i">
+          <div v-if="rendering === true" v-for="(q, i) in question['McqQuestions']" :key="i">
             <h3 class="QuestionTitle">Question {{i+1}}: {{q['Question']}}</h3>
             <b-card class="Questions">
               <b-row>
@@ -37,9 +39,9 @@
                 </b-col>
                 <b-col>
                   <h5>Monthly</h5>
-                  <p>Probability to answer Correctly: {{monthlyAnalysis[index]['MonthlyMcqAnalysisResults'][i]['avg_result'] * 100}}%</p>
-                  <p>Time taken to Answer Question: {{monthlyAnalysis[index]['MonthlyMcqAnalysisResults'][i]['avg_time']}}</p>
-                  <p>Confidence in Answer: {{monthlyAnalysis[index]['MonthlyMcqAnalysisResults'][i]['AvgConfidenceString']}}</p>
+                  <p>Probability to answer Correctly: {{weeklyAnalysis[index]['WeeklyMcqAnalysisResults'][i]['avg_result'] * 100}}%</p>
+                  <p>Time taken to Answer Question: {{weeklyAnalysis[index]['WeeklyMcqAnalysisResults'][i]['avg_time']}}</p>
+                  <p>Confidence in Answer: {{weeklyAnalysis[index]['WeeklyMcqAnalysisResults'][i]['AvgConfidenceString']}}</p>
                 </b-col>
                 <b-col>
                   <h5>Yearly</h5>
@@ -79,11 +81,13 @@ export default {
   },
   methods: {
     getBestTopic () {
+      console.log('here 1', this.McqTopics)
       for (let index = 0; index < this.McqTopics.length; index++) {
-        if (this.McqTopics.length > 1 && this.McqTopics[index]['AvgResult'] > this.McqTopics[index - 1]['AvgResult']) {
+        this.bestTopic = this.McqTopics[0]
+        if (this.McqTopics.length > 1 && index > 0 && this.McqTopics[index]['AvgResult'] > this.McqTopics[index - 1]['AvgResult']) {
           this.bestTopic = this.McqTopics[index]
         } else if (this.McqTopics.length === 1) {
-          this.bestTopic = this.McqTopics[index]
+          this.bestTopic = this.McqTopics[0]
         }
       }
     },
@@ -95,6 +99,10 @@ export default {
     },
     fillData (index, xAxis, yAxis) {
       this.$refs.ProfileGraph[index].fillData(xAxis, yAxis)
+    },
+    getProfile () {
+      this.getBestTopic()
+      this.rendering = true
     }
   },
   updated: function () {
@@ -118,25 +126,21 @@ export default {
     axios({
       method: 'get',
       url: api + 'getProfile',
-      // data: JSON.stringify(mcq), // Get mcq associated with mcq_id
       headers: { 'Authorization': 'Bearer  ' + sessionToken }
     })
       .then((response) => {
-        console.log(response.data)
         this.body = response.data
-        this.questions = this.body['McqQuestions']
-        this.weeklyAnalysis = this.body['Weekly']
-        this.monthlyAnalysis = this.body['Monthly']
-        this.yearlyAnalysis = this.body['Yearly']
-        this.results = this.body['Results']
-        this.McqTopics = this.body['Topics']
-        this.getBestTopic()
+        this.questions = response.data['McqQuestions']
+        this.weeklyAnalysis = response.data['Weekly']
+        this.monthlyAnalysis = response.data['Monthly']
+        this.yearlyAnalysis = response.data['Yearly']
+        this.results = response.data['Results']
+        this.McqTopics = response.data['Topics']
       })
       .catch(error => {
         console.log(error)
         this.errored = true
       })
-    this.rendering = true
   }
 }
 </script>

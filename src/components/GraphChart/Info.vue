@@ -77,6 +77,7 @@ export default {
           headers: { 'Authorization': 'Bearer  ' + sessionToken }
         })
           .then((response) => {
+            console.log('Here!', response)
             this.configs = request.GraphInfoModal
           })
           .catch(error => {
@@ -87,6 +88,7 @@ export default {
     }
   },
   created () {
+    console.log('Echo')
     if (this.configs['GraphInfoModal'] === undefined) {
       axios({
         method: 'get',
@@ -94,6 +96,7 @@ export default {
         headers: {'Authorization': 'Bearer  ' + sessionToken}
       })
         .then((response) => {
+          console.log('Here!', response)
           this.configs = response.data
           this.popUpModal()
         })

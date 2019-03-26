@@ -11,6 +11,7 @@ import ProfileView from '@/components/ProfileView'
 import MCQView from '@/components/MCQView'
 import CreateGroupView from '@/components/CreateGroupView'
 import GroupView from '@/components/GroupView'
+import Admin from '@/components/Admin'
 import GraphDisplay from '@/components/GraphChart/GraphDisplay'
 import CalculateEquations from '@/components/GraphChart/CalculateEquations'
 import McqQuestions from '@/components/McqCreator/McqQuestions'
@@ -103,6 +104,11 @@ export default new Router({
       path: '/groupView',
       name: 'GroupView',
       component: GroupView
+    },
+    {
+      path: '/Admin',
+      name: 'Admin',
+      component: Admin
     }
   ]
 })

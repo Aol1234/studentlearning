@@ -39,7 +39,6 @@ export default {
       axios({
         method: 'get',
         url: api + 'viewUserGroups',
-        // data: JSON.stringify(body), // Get mcq associated with mcq_id
         headers: { 'Authorization': 'Bearer  ' + sessionToken }
       })
         .then((response) => {

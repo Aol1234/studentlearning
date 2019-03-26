@@ -56,7 +56,6 @@ export default {
         })
     },
     populate (mcq) {
-      console.log(mcq)
       axios({
         method: 'post',
         url: api + 'getSelectedMcq',
