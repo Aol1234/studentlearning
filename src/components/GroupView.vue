@@ -47,13 +47,18 @@ export default {
           this.Groups = response.data['Groups']
           this.GroupAnalysis = response.data['GroupTopicAnalysis']
           for (let index = 0; index < this.Groups.length; index++) {
-            let Post = new Group(
-              this.Groups[index]['Name'],
-              this.Groups[index]['Desc'],
-              this.GroupAnalysis[index]['TopicName'],
-              this.GroupAnalysis[index]['AvgResult']
-            )
-            this.GroupList.push(Post)
+            for (let i = 0; i < this.GroupAnalysis.length; i++) {
+              console.log(this.GroupAnalysis[i])
+              if (this.GroupAnalysis[i]['GroupId'] === this.Groups[index]['GroupId']) {
+                let Post = new Group(
+                  this.Groups[index]['Name'],
+                  this.Groups[index]['Desc'],
+                  this.GroupAnalysis[i]['TopicName'],
+                  this.GroupAnalysis[i]['AvgResult']
+                )
+                this.GroupList.push(Post)
+              }
+            }
           }
         })
         .catch(error => {

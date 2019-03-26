@@ -17,7 +17,6 @@
           </b-row>
         </b-container>
       </div>
-      {{this.questions.length}}
       <div v-if="rendering === true" v-for="(question, index) in questions" :key="index">
         <b-card class="Mcq" >
           <div class="McqHeader">
@@ -33,21 +32,27 @@
               <b-row>
                 <b-col>
                   <h5>Weekly</h5>
-                  <p>Probability to answer Correctly: {{weeklyAnalysis[index]['WeeklyMcqAnalysisResults'][i]['avg_result'] * 100}}%</p>
-                  <p>Time taken to Answer Question: {{weeklyAnalysis[index]['WeeklyMcqAnalysisResults'][i]['avg_time']}}</p>
-                  <p>Confidence in Answer: {{weeklyAnalysis[index]['WeeklyMcqAnalysisResults'][i]['AvgConfidenceString']}}</p>
+                  <div v-if="weeklyAnalysis[index] !== undefined">
+                    <p>Probability to answer Correctly: {{weeklyAnalysis[index]['WeeklyMcqAnalysisResults'][i]['avg_result'] * 100}}%</p>
+                    <p>Time taken to Answer Question: {{weeklyAnalysis[index]['WeeklyMcqAnalysisResults'][i]['avg_time']}}</p>
+                    <p>Confidence in Answer: {{weeklyAnalysis[index]['WeeklyMcqAnalysisResults'][i]['AvgConfidenceString']}}</p>
+                  </div>
                 </b-col>
                 <b-col>
                   <h5>Monthly</h5>
-                  <p>Probability to answer Correctly: {{weeklyAnalysis[index]['WeeklyMcqAnalysisResults'][i]['avg_result'] * 100}}%</p>
-                  <p>Time taken to Answer Question: {{weeklyAnalysis[index]['WeeklyMcqAnalysisResults'][i]['avg_time']}}</p>
-                  <p>Confidence in Answer: {{weeklyAnalysis[index]['WeeklyMcqAnalysisResults'][i]['AvgConfidenceString']}}</p>
+                  <div v-if="monthlyAnalysis[index] !== undefined">
+                    <p>Probability to answer Correctly: {{monthlyAnalysis[index]['MonthlyMcqAnalysisResults'][i]['avg_result'] * 100}}%</p>
+                    <p>Time taken to Answer Question: {{monthlyAnalysis[index]['MonthlyMcqAnalysisResults'][i]['avg_time']}}</p>
+                    <p>Confidence in Answer: {{monthlyAnalysis[index]['MonthlyMcqAnalysisResults'][i]['AvgConfidenceString']}}</p>
+                  </div>
                 </b-col>
                 <b-col>
                   <h5>Yearly</h5>
-                  <p>Probability to answer Correctly: {{yearlyAnalysis[index]['YearlyMcqAnalysisResults'][i]['avg_result'] * 100}}%</p>
-                  <p>Time taken to Answer Question: {{yearlyAnalysis[index]['YearlyMcqAnalysisResults'][i]['avg_time']}}</p>
-                  <p>Confidence in Answer: {{yearlyAnalysis[index]['YearlyMcqAnalysisResults'][i]['AvgConfidenceString']}}</p>
+                  <div v-if="yearlyAnalysis[index] !== undefined">
+                    <p>Probability to answer Correctly: {{yearlyAnalysis[index]['YearlyMcqAnalysisResults'][i]['avg_result'] * 100}}%</p>
+                    <p>Time taken to Answer Question: {{yearlyAnalysis[index]['YearlyMcqAnalysisResults'][i]['avg_time']}}</p>
+                    <p>Confidence in Answer: {{yearlyAnalysis[index]['YearlyMcqAnalysisResults'][i]['AvgConfidenceString']}}</p>
+                  </div>
                 </b-col>
               </b-row>
             </b-card>
