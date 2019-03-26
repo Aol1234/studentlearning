@@ -1,18 +1,29 @@
 <template>
-  <div class="Main MCQ">
-    <div v-if="rendering === true" v-for="(n, index) in this.numberOfQuestions" :key="index">
-     <b-card bg-variant="light">
-       {{question[index]}}
-       <b-form-group>
-         <b-form-radio-group v-model="chosenAnswers[index]['value']"
-                             :options="multipleChoice[index]"
-                             :name="names[index]">
-         </b-form-radio-group>
-       </b-form-group>
-       <Statistics :chosenAnswer="chosenAnswers[index]"></Statistics>
-     </b-card>
+  <div>
+    <div class="Main MCQ">
+      <div v-if="reRendering === false">
+      <div v-if="rendering === true" v-for="(n, index) in this.numberOfQuestions" :key="index">
+       <b-card bg-variant="light">
+         {{question[index]}}
+         <b-form-group>
+           <b-form-radio-group v-model="chosenAnswers[index]['value']"
+                               :options="multipleChoice[index]"
+                               :name="names[index]">
+           </b-form-radio-group>
+         </b-form-group>
+         <Statistics :chosenAnswer="chosenAnswers[index]"></Statistics>
+       </b-card>
+      </div>
+      <b-button class="Publish" v-on:click="result">Result</b-button>
     </div>
-    <b-button id="Publish" v-on:click="result">Result</b-button>
+    </div>
+    <div v-if="reRendering === true" class="Main">
+      <b-card bg-variant="light">
+        <p>Total time in milliseconds: {{totalTime}}</p>
+        <p>Total score: {{totalScore}}</p>
+        <b-button class="Publish" @click="reRouteToDash">Return to Dashboard</b-button>
+      </b-card>
+    </div>
   </div>
 </template>
 <script>
@@ -23,15 +34,15 @@ import axios from 'axios'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 export default {
-  // <Statistics v-for="(chosenAnswer, index) in chosenAnswers" :key="index.id" :chosenAnswer="chosenAnswer"></Statistics>
   name: 'McqComponent',
   components: {Statistics},
   data () {
     return {
       numberOfQuestions: 0, // json.numberOfQuestions // populated with number of questions
       rendering: false, // Prevent Rending until data evaluated,
-      timer: null, // Counts time
-      elapsed: null,
+      reRendering: false, // Re-renders view to display result
+      totalScore: 0,
+      totalTime: 0,
       names: [], // identifiers of question names
       multipleChoice: [], // Holds arrays of Answers
       question: [], // Holds array of Questions
@@ -72,7 +83,8 @@ export default {
         headers: { 'Authorization': 'Bearer  ' + sessionToken }
       })
         .then((response) => {
-          this.$router.replace('dashboard')
+          this.simpleStats()
+          this.reRendering = true
         })
         .catch(error => {
           console.log(error)
@@ -104,6 +116,19 @@ export default {
       // Answer['Id']
       let questionId = this.multipleChoice[Answer['Id']][Answer['value']]
       this.Answers[Answer['Id']]['result'] = questionId['Result']
+    },
+    simpleStats () {
+      let time = 0
+      let total = 0
+      for (let index = 0; index < this.Answers.length; index++) {
+        total += this.Answers[index]['result']
+        time += this.Answers[index]['time']
+      }
+      this.totalScore = total
+      this.totalTime = time / this.Answers.length
+    },
+    reRouteToDash () {
+      this.$router.replace('dashboard')
     }
   },
   created () {
@@ -116,13 +141,22 @@ export default {
 </script>
 
 <style scoped>
-#Publish{
-  margin: 3vw 38vw;
+.Publish{
+  margin: 3vw 32vw;
   padding: 2vw;
   border-radius: 10vw;
   text-align: center;
 }
 .MCQ {
   margin-top: 2vw;
+}
+.Main{
+  margin-left: 10vw;
+  margin-right: 10vw;
+  border-right-width: 0.2vw;
+  border-left-width: 0.2vw;
+  border-radius: 0.35vw;
+  border-color: #4938f8;
+  border-style: solid;
 }
 </style>
