@@ -20,7 +20,7 @@
     <div v-if="reRendering === true" class="Main">
       <b-card bg-variant="light">
         <p>Total time in milliseconds: {{totalTime}}</p>
-        <p>Total score: {{totalScore}}</p>
+        <p>Total score: {{totalScore}}%</p>
         <b-button class="Publish" @click="reRouteToDash">Return to Dashboard</b-button>
       </b-card>
     </div>
@@ -121,11 +121,11 @@ export default {
       let time = 0
       let total = 0
       for (let index = 0; index < this.Answers.length; index++) {
-        total += this.Answers[index]['result']
+        total += (this.Answers[index]['result'] / this.Answers[index]['total'])
         time += this.Answers[index]['time']
       }
-      this.totalScore = total
-      this.totalTime = time / this.Answers.length
+      this.totalScore = (total / this.Answers.length) * 100
+      this.totalTime = time
     },
     reRouteToDash () {
       this.$router.replace('dashboard')

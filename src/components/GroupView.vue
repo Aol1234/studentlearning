@@ -1,6 +1,7 @@
 <template>
-    <div class="Main">
+    <div>
       <Header></Header>
+      <div class="Main">
       <h2 id="Header">View Groups</h2>
       <b-button class="Search" @click="viewUserGroups">Click</b-button>
       <div class="Search">
@@ -14,6 +15,7 @@
           <p>Topic: {{group.topic}}</p>
           <p>Group Average: {{Math.round(group.avgResult * 1000)/10}}%</p>
         </b-card>
+      </div>
       </div>
     </div>
 </template>
