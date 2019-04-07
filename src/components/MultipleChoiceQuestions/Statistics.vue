@@ -9,12 +9,11 @@ export default {
   props: ['chosenAnswer'],
   watch: {
     chosenAnswer: {
-      handler: function (Answer) {
-        // console.log('Answer', Answer)
-        eventHub.$emit('Update Answer Value', Answer)
-        eventHub.$emit('Update Answer Count', Answer['Id'])
-        eventHub.$emit('Update Answer time', Answer)
-        eventHub.$emit('Update Answer Result', Answer)
+      handler: function (Answer) { // Activates when chosenAnswer is changed
+        eventHub.$emit('Update Answer Value', Answer) // Emits to update answer
+        eventHub.$emit('Update Answer Count', Answer['Id']) // Emits to update answer
+        eventHub.$emit('Update Answer time', Answer) // Emits to update answer
+        eventHub.$emit('Update Answer Result', Answer) // Emits to update answer
       },
       deep: true
     }

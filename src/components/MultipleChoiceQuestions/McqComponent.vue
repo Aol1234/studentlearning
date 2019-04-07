@@ -48,29 +48,29 @@ export default {
       question: [], // Holds array of Questions
       results: [], // selected is reformatted here before sending to server selected{id:0, val:1, time:12.01'secs'} -> results{result:1, time:12.01}
       chosenAnswers: [], // Populated with selected radio buttons
-      Answers: [],
+      Answers: [], // Array of questionnaires
       AnswerLength: [], // Ad-hoc hack to get answer length
-      McqId: 0,
+      McqId: 0, // Id of questionnaire
       UserId: 0, // Placeholder, swapped server side,
-      startTime: 0,
-      endTime: 0
+      startTime: 0, // Time questionnaire starts
+      endTime: 0 // Time questionnaire ends
     }
   },
   methods: {
-    formattingSelected () {
+    formattingSelected () { // Create template answer for each question
       for (let question in this.question) {
-        let first = this.multipleChoice[question][0]
+        let first = this.multipleChoice[question][0] // Default to same as bootstrap
         this.chosenAnswers.push({Id: question, result: first['Result'], total: this.AnswerLength[question], time: 0, changes: 0, value: 0})
         this.Answers.push({Id: question, result: first['Result'], total: this.AnswerLength[question], time: 0, changes: 0, value: 0})
       }
     },
-    populate () {
+    populate () { // Set-up questionnaire
       this.numberOfQuestions = this.question.length
-      this.formattingSelected()
-      this.startTime = new Date()
+      this.formattingSelected() // Create answer arrays
+      this.startTime = new Date() // Start timer
       this.rendering = true // Allows questions to render after preceding methods
     },
-    result () {
+    result () { // Format and send answers to server
       let result = {
         'McqId': this.McqId,
         'UserId': this.UserId, // Placeholder value, not shared with client
@@ -78,28 +78,26 @@ export default {
       }
       axios({
         method: 'post',
-        url: api + ':ID/:mcqID/result',
+        url: api + ':storeResult',
         data: JSON.stringify(result),
         headers: { 'Authorization': 'Bearer  ' + sessionToken }
       })
         .then((response) => {
-          this.simpleStats()
+          this.simpleStats() // Provide some stats to user
           this.reRendering = true
         })
         .catch(error => {
           console.log(error)
-          this.errored = true
         })
     },
-    getTime (Answer) {
-      this.endTime = new Date()
-      let timeDiff = this.endTime - this.startTime // in ms
-      // get ms
-      let ms = Math.round(timeDiff)
-      this.startTime = new Date()
-      return this.Answers[Answer['Id']]['time'] + ms
+    getTime (Answer) { // Calculate time to answer
+      this.endTime = new Date() // Get time
+      let timeDiff = this.endTime - this.startTime // Get difference
+      let ms = Math.round(timeDiff) // Round
+      this.startTime = new Date() // Reset timer
+      return this.Answers[Answer['Id']]['time'] + ms // Time plus new time
     },
-    getMCQ (mcq) {
+    getMCQ (mcq) { // Get selected mcq
       let questions = mcq.data['McqQuestions']
       this.McqId = mcq.data['McqId']
       // For each question
@@ -112,14 +110,13 @@ export default {
         this.multipleChoice.push(questions[question]['Answers'])
       }
     },
-    match (Answer) {
-      // Answer['Id']
+    match (Answer) { // Sets answer array to users selected result
       let questionId = this.multipleChoice[Answer['Id']][Answer['value']]
       this.Answers[Answer['Id']]['result'] = questionId['Result']
     },
-    simpleStats () {
-      let time = 0
-      let total = 0
+    simpleStats () { // Provide some primitive stats to user
+      let time = 0 // Total time
+      let total = 0 // Percentage correct
       for (let index = 0; index < this.Answers.length; index++) {
         total += (this.Answers[index]['result'] / this.Answers[index]['total'])
         time += this.Answers[index]['time']
@@ -127,15 +124,15 @@ export default {
       this.totalScore = (total / this.Answers.length) * 100
       this.totalTime = time
     },
-    reRouteToDash () {
+    reRouteToDash () { // Reroute to dashboard
       this.$router.replace('dashboard')
     }
   },
   created () {
-    eventHub.$on('Populate Exam', mcq => { this.getMCQ(mcq); this.populate() })
-    eventHub.$on('Update Answer Count', Id => { this.Answers[Id]['changes'] += 1 })
-    eventHub.$on('Update Answer Value', Answer => { this.Answers[Answer['Id']]['value'] = Answer['value'] })
-    eventHub.$on('Update Answer time', Answer => { this.Answers[Answer['Id']]['time'] = this.getTime(Answer); this.match(Answer) })
+    eventHub.$on('Populate Exam', mcq => { this.getMCQ(mcq); this.populate() }) // Listen to request to get mcq
+    eventHub.$on('Update Answer Count', Id => { this.Answers[Id]['changes'] += 1 }) // Listen to request to update answer
+    eventHub.$on('Update Answer Value', Answer => { this.Answers[Answer['Id']]['value'] = Answer['value'] }) // Listen to request to update answer
+    eventHub.$on('Update Answer time', Answer => { this.Answers[Answer['Id']]['time'] = this.getTime(Answer); this.match(Answer) }) // Listen to request to update answer
   }
 }
 </script>

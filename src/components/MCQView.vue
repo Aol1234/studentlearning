@@ -32,17 +32,17 @@ export default {
   components: {McqComponent, Header},
   data () {
     return {
-      Questionnaires: [],
-      rendered: true,
-      mcq: '',
-      response: '',
-      api: api,
-      InitialRender: true,
-      McqRender: false
+      Questionnaires: [], // Array of questionnaires
+      rendered: true, // render MCQs
+      mcq: '', // Holds data of selected MCQ
+      response: '', // Holds results
+      api: api, // Holds api address
+      InitialRender: true, // render MCQs
+      McqRender: false // render questionnaire
     }
   },
   methods: {
-    getMcqs () {
+    getMcqs () { // Request all MCQs
       axios({
         method: 'get',
         url: api + 'getMcqs',
@@ -55,7 +55,7 @@ export default {
           console.log(error)
         })
     },
-    populate (mcq) {
+    populate (mcq) { // Get requested questionnaire
       axios({
         method: 'post',
         url: api + 'getSelectedMcq',
@@ -63,7 +63,7 @@ export default {
         headers: { 'Authorization': 'Bearer  ' + sessionToken }
       })
         .then((response) => {
-          eventHub.$emit('Populate Exam', response)
+          eventHub.$emit('Populate Exam', response) // Update render
         })
         .catch(error => {
           console.log(error)
@@ -73,7 +73,7 @@ export default {
     }
   },
   created () {
-    this.getMcqs()
+    this.getMcqs() // Request all MCQs
     this.rendered = true // Renders only after Mcqs are retrieved from the server
   }
 }
