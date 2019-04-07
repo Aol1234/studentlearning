@@ -25,44 +25,44 @@
 <script>
 import firebase from 'firebase'
 import axios from 'axios'
+// address of backend
 export const api = 'https://studentlearningserver.herokuapp.com/' // 'http://localhost:8000/'
-export var sessionToken = ''
-export var headers = ''
+export var sessionToken = '' // Session token
+export var headers = '' // Request header
 export default {
   name: 'LoginPage',
   data () {
     return {
-      user: {
+      user: { // Login information
         email: '',
-        // name: '',
         password: ''
       },
-      idToken: ''
+      idToken: '' // Session token
     }
   },
   methods: {
-    SignUp () {
+    SignUp () { // Sign-up to Firebase
       firebase.auth().createUserWithEmailAndPassword(this.user.email, this.user.password).then((user) => {
-        this.authSignUp()
-        this.$router.replace('dashboard')
+        this.authSignUp() // authorise to server
+        this.$router.replace('dashboard') // Route to dashboard
       }).catch((err) => {
         alert('Error: ' + err.message)
       })
     },
-    Login () {
+    Login () { // Login to Firebase
       firebase.auth().signInWithEmailAndPassword(this.user.email, this.user.password).then((user) => {
-        this.authLogin()
-        this.$router.replace('dashboard')
+        this.authLogin() // authorise to server
+        this.$router.replace('dashboard') // Route to dashboard
       }).catch((err) => {
         alert('Error: ' + err.message)
       })
     },
-    authLogin () {
+    authLogin () { // retrieve token
       firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function (idToken) {
         sessionToken = idToken
         headers = {
           Authorization: `Bearer  ${sessionToken}`
-        }
+        } // Login on server
         axios.post(api + 'studentAuth/Login', JSON.stringify({idtoken: idToken}))
           .catch(error => {
             console.log(error)
@@ -71,12 +71,12 @@ export default {
         console.log(error)
       })
     },
-    authSignUp () {
+    authSignUp () { // retrieve token
       firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function (idToken) {
         sessionToken = idToken
         headers = {
           Authorization: `Bearer  ${sessionToken}`
-        }
+        } // Sign-up on server
         axios.post(api + 'studentAuth/SignUp', JSON.stringify({idtoken: idToken}))
           .catch(error => {
             console.log(error)
