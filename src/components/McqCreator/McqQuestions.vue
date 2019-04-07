@@ -29,49 +29,49 @@ export default {
   components: {WatchMcqQuestion, McqAnswers},
   data () {
     return {
-      questionIndex: [],
-      question: [],
-      questionNumber: -1,
-      questionList: [],
+      questionIndex: [], // Question Id Array
+      question: [], // Question
+      questionNumber: -1, // Question Id
+      questionList: [], // Question Array
       previousUpdate: []
     }
   },
   methods: {
-    AddQuestion () {
+    AddQuestion () { // Add question
       this.questionIndex.push(this.questionNumber += 1)
       this.question.push()
       this.questionList.push({Id: (this.question.length - 1), Question: '', Answers: {}})
     },
-    updateQuestion (QuestionIdAndQuestion) {
+    updateQuestion (QuestionIdAndQuestion) { // Update question values
       let QId = QuestionIdAndQuestion[0]
       this.questionList[QId]['Id'] = QId
       this.questionList[QId]['Question'] = QuestionIdAndQuestion[1]
     },
-    updateAnswer (QuestionIdAndAnswer) {
+    updateAnswer (QuestionIdAndAnswer) { // Update answer value
       let questionId = QuestionIdAndAnswer[0]
       this.questionList[questionId]['Answers'] = QuestionIdAndAnswer[1]
       this.questionList[questionId]['Id'] = questionId
       this.questionList[questionId]['Question'] = this.question[questionId]
-      for (let index = 0; index < this.questionList[questionId]['Answers'].length; index++) {
+      for (let index = 0; index < this.questionList[questionId]['Answers'].length; index++) { // Reset answer value
         if (this.questionList[questionId]['Answers'][index]['result'] > 0) {
           this.questionList[questionId]['Answers'][index]['result'] = this.questionList[questionId]['Answers'].length
         }
       }
     },
-    publish () {
+    publish () { // Emit questions array
       eventHub.$emit('Collect Questions', this.questionList)
     },
-    setCorrectAnswer (QuestionIdAndCorrectAnswerValue) {
+    setCorrectAnswer (QuestionIdAndCorrectAnswerValue) { // Update answer values
       let questionId = QuestionIdAndCorrectAnswerValue[0]
       let numberOfAnswers = this.questionList[questionId]['Answers'].length
       this.questionList[questionId]['Answers'][QuestionIdAndCorrectAnswerValue[1]]['result'] = numberOfAnswers
     }
   },
-  created () {
-    eventHub.$on('Update the Mcq Question Editor', QuestionIdAndAnswer => { this.updateAnswer(QuestionIdAndAnswer) })
-    eventHub.$on('Update the Mcq Question Answer', QuestionIdAndCorrectAnswerValue => { this.setCorrectAnswer(QuestionIdAndCorrectAnswerValue) })
-    eventHub.$on('Update the Mcq Question Title', QuestionIdAndQuestion => { this.updateQuestion(QuestionIdAndQuestion) })
-    eventHub.$on('Publishing Mcq', placeholder => { this.publish() })
+  created () { // Listeners
+    eventHub.$on('Update the Mcq Question Editor', QuestionIdAndAnswer => { this.updateAnswer(QuestionIdAndAnswer) }) // Listens to answer result update
+    eventHub.$on('Update the Mcq Question Answer', QuestionIdAndCorrectAnswerValue => { this.setCorrectAnswer(QuestionIdAndCorrectAnswerValue) }) // Listens to correct answer update
+    eventHub.$on('Update the Mcq Question Title', QuestionIdAndQuestion => { this.updateQuestion(QuestionIdAndQuestion) }) // Listens to question title update
+    eventHub.$on('Publishing Mcq', placeholder => { this.publish() }) // Listens to request to publish results
   }
 }
 </script>

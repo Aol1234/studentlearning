@@ -30,22 +30,21 @@ export default {
   name: 'McqDetails',
   data () {
     return {
-      topics: [
+      topics: [ // Topic options
         'Python',
         'History',
         'Geography'
       ],
       numberOfQuestions: 0, // placeholder for watch method
       topic: '', // placeholder for watch method
-      name: '',
-      desc: ''}
+      name: '', // Questionnaire name
+      desc: '' // Questionnaire description
+    }
   },
-  watch: {
+  watch: { // watch variables
     numberOfQuestions: function (numberOfQuestions) {
-      console.log(numberOfQuestions)
     },
     'topic': function (Topic) {
-      console.log(Topic)
       eventHub.$emit('Collect Topic', Topic)
     },
     name: function (Name) {

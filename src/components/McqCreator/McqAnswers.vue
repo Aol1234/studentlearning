@@ -21,33 +21,30 @@ export default {
   name: 'McqAnswers',
   data () {
     return {
-      answerIndex: [],
-      answers: [],
+      answerIndex: [], // Array of answer ids
+      answers: [], // Array of Question answers
       answerNumber: -1,
-      chosenAnswer: ''
+      chosenAnswer: '' // Correct answer
     }
   },
   props: ['questionId'],
   methods: {
-    AddAnswers () {
-      if (this.answerNumber < 10) {
-        this.answerIndex.push(this.answerNumber += 1)
-        this.formattingAnswer(this.answerNumber)
+    AddAnswers () { // Add answer
+      if (this.answerNumber < 10) { // Limit answers to ten
+        this.answerIndex.push(this.answerNumber += 1) // Add id
+        this.formattingAnswer(this.answerNumber) // Create template
       }
     },
-    formattingAnswer (i) {
+    formattingAnswer (i) { // Create template
       let answer = {value: i, text: '', result: 0}
-      this.answers.push(answer)
-      // console.log('Updated Answer', answer)
+      this.answers.push(answer) // Add answer to array
     }
   },
   watch: {
-    answers: function (val) {
-      console.log('Updated Answer', val, this.questionId)
+    answers: function (val) { // Update answer result
       eventHub.$emit('Update the Mcq Question Editor', [this.questionId, val])
     },
-    chosenAnswer: function (val) {
-      console.log(val)
+    chosenAnswer: function (val) { // Update correct answer
       eventHub.$emit('Update the Mcq Question Answer', [this.questionId, val])
     }
   }

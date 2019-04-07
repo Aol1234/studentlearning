@@ -9,7 +9,7 @@ export default {
   name: 'WatchMcqQuestion',
   props: ['ChosenQuestion', 'questions'],
   watch: {
-    ChosenQuestion (QuestionIdAndQuestion) {
+    ChosenQuestion (QuestionIdAndQuestion) { // Activate if question title changes
       if (QuestionIdAndQuestion[1] === this.questions[QuestionIdAndQuestion[0]]['Question']) {
       } else {
         eventHub.$emit('Update the Mcq Question Title', QuestionIdAndQuestion)

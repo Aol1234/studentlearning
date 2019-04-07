@@ -24,45 +24,44 @@ export default {
   },
   data () {
     return {
-      NumberOfQuestions: 0,
-      Questions: [],
+      NumberOfQuestions: 0, // Number of questions
+      Questions: [], // Array of created questions
       Topic: '',
       Desc: '',
       Name: ''
     }
   },
   methods: {
-    Publish () {
-      eventHub.$emit('Publishing Mcq', 'placeholder')
-      eventHub.$on('Collect Questions', Question => { this.Questions = Question })
-      let mcq = {
+    Publish () { // Send questionnaire to server
+      eventHub.$emit('Publishing Mcq', 'placeholder') // Emit signal to send questionnaire
+      eventHub.$on('Collect Questions', Question => { this.Questions = Question })  // Listen for collection of questions
+      let mcq = { // Format questionnaire
         Name: this.Name,
         Desc: this.Desc,
         Topic: this.Topic,
         McqQuestions: this.Questions
       }
-      axios({
+      axios({ // Publish questionnaire
         method: 'post',
         url: api + 'publishMcq',
         data: JSON.stringify(mcq), // Get mcq associated with mcq_id
         headers: { 'Authorization': 'Bearer  ' + sessionToken }
       })
         .then((response) => {
-          this.$router.replace('dashboard')
+          this.$router.replace('dashboard') // Route to Dashboard
         })
         .catch(error => {
           console.log(error)
-          this.errored = true
         })
     }
   },
   created () {
-    eventHub.$on('Collect Answer', Answer => { this.Publish(Answer) })
-    eventHub.$on('Collect Questions', Question => { this.Questions = Question })
-    eventHub.$on('Collect Topic', Topic => { this.Topic = Topic })
-    eventHub.$on('Collect Name', Name => { this.Name = Name })
-    eventHub.$on('Collect Desc', Desc => { this.Desc = Desc })
-    eventHub.$on('Collect NumberOfQuestions', NumberOfQuestions => { this.NumberOfQuestions = NumberOfQuestions })
+    eventHub.$on('Collect Answer', Answer => { this.Publish(Answer) }) // Listen to Answer
+    eventHub.$on('Collect Questions', Question => { this.Questions = Question }) // Listen to Questions
+    eventHub.$on('Collect Topic', Topic => { this.Topic = Topic }) // Listen to Topic
+    eventHub.$on('Collect Name', Name => { this.Name = Name }) // Listen to Name
+    eventHub.$on('Collect Desc', Desc => { this.Desc = Desc }) // Listen to Desc
+    eventHub.$on('Collect NumberOfQuestions', NumberOfQuestions => { this.NumberOfQuestions = NumberOfQuestions }) // Listen to NumberOfQuestions
   }
 }
 </script>
