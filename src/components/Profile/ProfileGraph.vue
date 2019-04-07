@@ -5,15 +5,11 @@
 import ProfileReactive from '@/components/Profile/ProfileReactive'
 export default {
   name: 'ProfileGraph',
-  components: {
-    ProfileReactive
-  },
+  components: { ProfileReactive },
   props: ['index'],
   data () {
     return {
-      dataCollection: null,
-      concentrationArray: ['Jan', 'Feb', 'Mar', 3, 4, 5, 6, 7, 8, 9],
-      dosageArray: [4, 6, 4, 5, 2, 7, 5, 6, 3, 5, 7]
+      dataCollection: null
     }
   },
   methods: {

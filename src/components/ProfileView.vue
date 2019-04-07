@@ -22,9 +22,11 @@
           <div class="McqHeader">
             <h2 class="McqTitle">Title: {{question['Name']}}</h2>
             <ProfileGraph class="Graph" ref="ProfileGraph" :index="index"></ProfileGraph>
-            <p>Average Result of Previous week: {{formatPercentage(weeklyAnalysis[index]['AvgResult'])}}%</p>
-            <p>Topic: {{question['Topic']}}</p>
-            <p>Last Tried: {{formatDate(weeklyAnalysis[index]['LastModified'])}}</p>
+            <div v-if="weeklyAnalysis[index] !== undefined">
+              <p>Average Result of Previous week: {{formatPercentage(weeklyAnalysis[index]['AvgResult'])}}%</p>
+              <p>Topic: {{question['Topic']}}</p>
+              <p>Last Analysed: {{formatDate(weeklyAnalysis[index]['LastModified'])}}</p>
+            </div>
           </div>
           <div v-if="rendering === true" v-for="(q, i) in question['McqQuestions']" :key="i">
             <h3 class="QuestionTitle">Question {{i+1}}: {{q['Question']}}</h3>
@@ -73,20 +75,19 @@ export default {
   components: {ProfileGraph, Header},
   data () {
     return {
-      body: [],
-      questions: [],
-      weeklyAnalysis: [],
-      monthlyAnalysis: [],
-      yearlyAnalysis: [],
-      McqTopics: [],
-      bestTopic: [],
-      results: [],
-      rendering: false
+      body: [], // Holds body of request
+      questions: [], // Holds questions of request
+      weeklyAnalysis: [], // Holds weeklyAnalysis of request
+      monthlyAnalysis: [], // Holds monthlyAnalysis of request
+      yearlyAnalysis: [], // Holds yearlyAnalysis of request
+      McqTopics: [], // Holds McqTopics of request
+      bestTopic: [], // Holds topicAnalysis of request
+      results: [], // Holds results of request
+      rendering: false // Defaults rendering
     }
   },
   methods: {
-    getBestTopic () {
-      console.log('here 1', this.McqTopics)
+    getBestTopic () { // Find topic with highest average
       for (let index = 0; index < this.McqTopics.length; index++) {
         this.bestTopic = this.McqTopics[0]
         if (this.McqTopics.length > 1 && index > 0 && this.McqTopics[index]['AvgResult'] > this.McqTopics[index - 1]['AvgResult']) {
@@ -102,25 +103,23 @@ export default {
     formatPercentage (val) {
       return Math.round(val * 10000) / 100
     },
-    fillData (index, xAxis, yAxis) {
+    fillData (index, xAxis, yAxis) { // Provides data to questionnaire graph
       this.$refs.ProfileGraph[index].fillData(xAxis, yAxis)
     },
-    getProfile () {
+    getProfile () { // Renders Profile
       this.getBestTopic()
       this.rendering = true
     }
   },
   updated: function () {
-    this.$nextTick(function () {
-      // Code that will run only after the
-      // entire view has been re-rendered
-      for (var index = 0; index < this.questions.length; index++) {
+    this.$nextTick(function () { // Updates graph after data is loaded
+      for (var index = 0; index < this.questions.length; index++) { // for each questionnaire
         let xAxis = []
         let yAxis = []
-        for (var i = 0; i < this.results[index].length; i++) {
-          let y = Math.round(this.results[index][i]['AverageResult'] * 10000) / 100
+        for (var i = 0; i < this.results[index].length; i++) { // for each result
+          let y = Math.round(this.results[index][i]['AverageResult'] * 10000) / 100 // get result
           yAxis.push(y)
-          let x = moment(String(this.results[index][i]['CreatedAt'])).format('DD/MM/YYYY hh:mm')
+          let x = moment(String(this.results[index][i]['CreatedAt'])).format('DD/MM/YYYY hh:mm') // get date and format
           xAxis.push(x)
         }
         this.fillData(index, xAxis, yAxis)
@@ -128,12 +127,12 @@ export default {
     })
   },
   created () {
-    axios({
+    axios({ // Get profile data
       method: 'get',
       url: api + 'getProfile',
       headers: { 'Authorization': 'Bearer  ' + sessionToken }
     })
-      .then((response) => {
+      .then((response) => { // Store data
         this.body = response.data
         this.questions = response.data['McqQuestions']
         this.weeklyAnalysis = response.data['Weekly']
@@ -144,7 +143,6 @@ export default {
       })
       .catch(error => {
         console.log(error)
-        this.errored = true
       })
   }
 }
