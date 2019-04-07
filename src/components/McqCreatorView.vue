@@ -34,7 +34,7 @@ export default {
   methods: {
     Publish () { // Send questionnaire to server
       eventHub.$emit('Publishing Mcq', 'placeholder') // Emit signal to send questionnaire
-      eventHub.$on('Collect Questions', Question => { this.Questions = Question })  // Listen for collection of questions
+      eventHub.$on('Collect Questions', Question => { this.Questions = Question }) // Listen for collection of questions
       let mcq = { // Format questionnaire
         Name: this.Name,
         Desc: this.Desc,

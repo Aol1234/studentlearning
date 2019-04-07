@@ -30,55 +30,51 @@ export default {
   data () {
     return {
       Search: '',
-      Code: [],
-      Groups: [],
-      GroupAnalysis: [],
-      GroupList: []
+      Data: [],
+      Groups: [], // Array of groups
+      GroupAnalysis: [], // Array of analysis
+      GroupList: [] // Array of groups
     }
   },
   methods: {
-    viewUserGroups () {
+    viewUserGroups () { // Request users groups
       axios({
         method: 'get',
         url: api + 'viewUserGroups',
         headers: { 'Authorization': 'Bearer  ' + sessionToken }
       })
         .then((response) => {
-          console.log(response.data)
-          this.Code = response.data
-          this.Groups = response.data['Groups']
-          this.GroupAnalysis = response.data['GroupTopicAnalysis']
-          for (let index = 0; index < this.Groups.length; index++) {
-            for (let i = 0; i < this.GroupAnalysis.length; i++) {
-              console.log(this.GroupAnalysis[i])
-              if (this.GroupAnalysis[i]['GroupId'] === this.Groups[index]['GroupId']) {
-                let Post = new Group(
+          this.Data = response.data // Get Data
+          this.Groups = response.data['Groups'] // Get groups
+          this.GroupAnalysis = response.data['GroupTopicAnalysis'] // Get group analysis
+          for (let index = 0; index < this.Groups.length; index++) { // Each group
+            for (let i = 0; i < this.GroupAnalysis.length; i++) { // Each analysis
+              if (this.GroupAnalysis[i]['GroupId'] === this.Groups[index]['GroupId']) { // analysis and group matach
+                let Post = new Group( // Create new class object
                   this.Groups[index]['Name'],
                   this.Groups[index]['Desc'],
                   this.GroupAnalysis[i]['TopicName'],
                   this.GroupAnalysis[i]['AvgResult']
                 )
-                this.GroupList.push(Post)
+                this.GroupList.push(Post) // Add group to array
               }
             }
           }
         })
         .catch(error => {
           console.log(error)
-          this.errored = true
         })
     }
   },
-  computed: {
+  computed: { // Compute group list
     FilterdList () {
       return this.GroupList.filter(group => {
-        console.log(group)
         return group.title.toLowerCase().includes(this.Search.toLowerCase())
       })
     }
   }
 }
-class Group {
+class Group { // Group construct
   constructor (title, desc, topic, avgResult) {
     this.title = title
     this.desc = desc
