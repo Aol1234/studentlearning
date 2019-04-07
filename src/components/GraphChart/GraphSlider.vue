@@ -12,14 +12,14 @@
       </div>
     </b-col>
     <b-col style="max-width: 15rem; float: left;">
-      <label class="mr-sm-4" for="B">B</label>
+      <label class="mr-sm-4" for="B">Sharpness</label>
       <b-form-input id="B" v-model="BInput" v-on.lazy:input='emitBInput(BInput)'></b-form-input>
-      <label class="mr-sm-4" for="Min">Min Response</label>
+      <label class="mr-sm-4" for="Min">Offset</label>
       <b-form-input id="Min" v-model="MinResponse" v-on.lazy:input='emitMinResponse(MinResponse)'></b-form-input>
       <label class="mr-sm-4" for="Max">Max Response</label>
       <b-form-input id="Max" v-model="MaxResponse" v-on.lazy:input='emitMaxResponse(MaxResponse)'></b-form-input>
-      <label class="mr-sm-4" for="Dev">Deviation</label>
-      <b-form-input id="Dev" v-model="deviation" v-on.lazy:input='emitdeviation(deviation)'></b-form-input>
+      <label class="mr-sm-4" for="Dev">Noise</label>
+      <b-form-input id="Dev" v-model="noise" v-on.lazy:input='emitNoise(noise)'></b-form-input>
     </b-col>
   </b-modal>
   </div>
@@ -38,7 +38,6 @@ export default {
     deep: true,
     value (val) {
       if (val) {
-        console.log('GraphSlider WatchEvent Caught')
         this.$nextTick(() => this.$refs.slider.refresh())
       }
     }
@@ -46,11 +45,11 @@ export default {
   data () {
     return {
       BInput: 20,
-      MinResponse: 1,
+      MinResponse: 1, // OffSet
       MaxResponse: 150,
-      deviation: 0.1,
+      noise: 0.1,
       value: 8,
-      options: {
+      options: { // Configs of Slider
         width: 8,
         height: 200,
         dotSize: 20,
@@ -72,7 +71,7 @@ export default {
       }
     }
   },
-  methods: {
+  methods: { // Update slider values
     emitBInput (val) {
       eventHub.$emit('BInput', val)
     },
@@ -82,9 +81,13 @@ export default {
     emitMaxResponse (val) {
       eventHub.$emit('MaxResponse', val)
     },
-    emitdeviation (val) {
-      eventHub.$emit('deviation', val)
+    emitNoise (val) {
+      eventHub.$emit('noise', val)
     }
+  },
+  created () { // Get default slider values
+    eventHub.$emit('getCalculationValues', '')
+    eventHub.$on('receiveCalculationValues', values => { this.BInput = values['BInput']; this.MinResponse = values['Min']; this.MaxResponse = values['Max']; this.noise = values['Noise'] })
   }
 }
 </script>

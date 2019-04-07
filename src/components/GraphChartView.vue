@@ -5,7 +5,7 @@
       <ul>
       </ul>
       <b-container id="test">
-        <b-card title="Input in ml of 10E-05 M of Noradrenaline" style="max-width: 95rem;" bg-variant="light">
+        <b-card title="Dosage Response" style="max-width: 95rem;" bg-variant="light">
           <div id="hideInfo" class="userInfo">
             <info ref="settingsModalRef"></info>
           </div>
@@ -33,8 +33,8 @@
           </div>
         </b-card>
       </b-container>
-      <GraphTable  ref="GraphTable"></GraphTable>
-      <CalculateEquations ref="CalculateEquations"></CalculateEquations>
+      <GraphTable ref="GraphTable"></GraphTable>
+      <GraphEquations ref="GraphEquations"></GraphEquations>
     </section>
   </div>
 
@@ -46,7 +46,7 @@ import {eventHub} from '@/EventHub'
 import GraphDisplay from '@/components/GraphChart/GraphDisplay'
 import GraphSlider from '@/components/GraphChart/GraphSlider'
 import GraphTable from '@/components/GraphChart/GraphTable'
-import CalculateEquations from '@/components/GraphChart/CalculateEquations'
+import GraphEquations from '@/components/GraphChart/GraphEquations'
 import Info from '@/components/GraphChart/Info'
 import Header from '@/components/Extra/Header'
 import axios from 'axios'
@@ -57,45 +57,40 @@ export default {
     GraphSlider,
     GraphDisplay,
     GraphTable,
-    CalculateEquations,
+    GraphEquations,
     Header
   },
   data () {
     return {
       chart: null,
-      datacollection: GraphDisplay.datacollection,
-      milliLiterInput: '',
-      dosageArray: [],
-      concentrationArray: [],
-      equationValue: CalculateEquations.equationValue,
-      BInput: '', // '20^2',
-      MinResponse: CalculateEquations.MinResponse, // '0',
-      MaxResponse: CalculateEquations.MaxResponse, // '150'
-      deviation: CalculateEquations.deviation,
-      checked: false // Info modal checkbox
+      datacollection: GraphDisplay.datacollection, // data collection for graph
+      milliLiterInput: '', // input dosage
+      dosageArray: [], // Array of inputted values
+      concentrationArray: [], // Array of concentration (currently not implemented)
+      checked: false, // Info modal checkbox
+      block: false
     }
   },
   methods: {
-    submitEquationInput () {
-      if (this.milliLiterInput === '' || isNaN(this.milliLiterInput)) {
+    submitEquationInput () { // Submit input value
+      if (this.milliLiterInput === '' || isNaN(this.milliLiterInput)) { // Validate input
         alert('This is not a number')
       } else {
         if ((this.dosageArray.length + 1) <= this.$refs.slider.value) {
-          let milliLiter = this.milliLiterInput * 0.001 // Convert to Milli Value
-          let concentration = this.$refs.CalculateEquations.calculateHillDosageResponse(milliLiter)
-          let response = this.$refs.CalculateEquations.calculateHillDosageResponse(milliLiter)
-          this.passToTable([this.milliLiterInput, response, concentration])
-          this.dosageArray.push(response)
-          this.concentrationArray.push(milliLiter)
-          eventHub.$emit('User inputted new value for graph', milliLiter)
+          let milliLiter = this.milliLiterInput
+          let response = this.$refs.GraphEquations.calculateHillDosageResponse(milliLiter) // Calculate response
+          this.passToTable([this.milliLiterInput, response]) // Pass results to table
+          this.dosageArray.push(response) // Pass dosage value to array
+          this.concentrationArray.push(milliLiter) // Pass response to array
+          eventHub.$emit('User inputted new value for graph', milliLiter) // Emit new value to graph
           this.milliLiterInput = '' // Clears user input
         }
       }
     },
-    fillData () {
+    fillData () { // Fill graph with data
       this.$refs.GraphDisplay.fillData()
     },
-    Calculate () {
+    Calculate () { // Render graph
       let chart = document.getElementById('hideChart')
       this.$refs.GraphDisplay.concentrationArray = this.concentrationArray
       this.$refs.GraphDisplay.dosageArray = this.dosageArray
@@ -106,11 +101,11 @@ export default {
         this.fillData()
       }
     },
-    passToTable (val) {
-      let array = { amount: val[0], moles_added: val[0], concentration: val[2], response: val[1] }
+    passToTable (val) { // Pass values to table
+      let array = { amount: val[0], response: val[1] }
       this.$refs.GraphTable.items.push(array)
     },
-    SendData () {
+    SendData () { // Send results to server
       let data = this.$refs.GraphDisplay.dosageArray
       axios({
         method: 'post',
@@ -125,12 +120,11 @@ export default {
           console.log(error)
         })
     },
-    sample () {
-      let dosage = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 5096, 10192, 20384, 40768, 81536, 163072, 326144, 652288
-      ]
+    sample () { // Sample graph
+      let dosage = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 5096, 10192, 20384, 40768, 81536, 163072, 326144, 652288]
       let temp = []
       for (var x in dosage) {
-        var result = this.$refs.CalculateEquations.calculateHillDosageResponse((dosage[x] * 0.01))
+        var result = this.$refs.GraphEquations.calculateHillDosageResponse((dosage[x] * 0.01))
         temp.push(result)
       }
       this.$refs.GraphDisplay.dosageArray = temp

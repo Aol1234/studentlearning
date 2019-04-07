@@ -16,14 +16,13 @@ export default {
     }
   },
   methods: {
-    fillData () {
+    fillData () { // Fill graph with data
       this.datacollection = {
         // Data for the x-axis of the chart
         labels: this.concentrationArray,
         datasets: [
           {
             label: 'Data Result',
-            backgroundColor: '#f87979',
             borderWidth: 5,
             fill: true,
             borderColor: '#5775F8',
@@ -32,10 +31,6 @@ export default {
           }
         ]
       }
-    },
-    getRandomInt () {
-      // JS function to generate numbers to be used for the chart
-      return Math.floor(Math.random() * (50 - 5 + 1)) + 5
     }
   }
 }

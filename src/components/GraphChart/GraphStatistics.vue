@@ -13,11 +13,11 @@ export default {
     }
   },
   methods: {
-    collectValues (val) {
+    collectValues (val) { // Collect stats
       this.collection.push(val)
     }
   },
-  created() {
+  created() { // Listen for new input
     eventHub.$on('User inputted new value for graph', value => { this.collectValues(value) })
   }
 }

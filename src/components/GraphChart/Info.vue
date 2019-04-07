@@ -19,11 +19,14 @@
         </b-card>
         <h6><b>Graph</b></h6>
         <b-card>
-          <p>The graph options</p>
+          <p><b>Submit</b>: Used to input new values</p>
+          <p><b>Calculate</b>: Used to render the graph</p>
+          <p><b>Sample</b>: Provides a sample graph</p>
         </b-card>
         <h6><b>Table</b></h6>
         <b-card>
-          <p>The table will display</p>
+          <p><b>Amount</b>: This is the amount inputted</p>
+          <p><b>Response</b>: This is the response according to the input</p>
         </b-card>
       </div>
     </b-modal>
