@@ -13,7 +13,7 @@ import CreateGroupView from '@/components/CreateGroupView'
 import GroupView from '@/components/GroupView'
 import Admin from '@/components/Admin'
 import GraphDisplay from '@/components/GraphChart/GraphDisplay'
-import CalculateEquations from '@/components/GraphChart/CalculateEquations'
+import GraphEquations from '@/components/GraphChart/GraphEquations'
 import McqQuestions from '@/components/McqCreator/McqQuestions'
 import ProfileGraph from '@/components/Profile/ProfileGraph'
 import BootstrapVue from 'bootstrap-vue'
@@ -73,9 +73,9 @@ export default new Router({
           component: GraphDisplay
         },
         {
-          path: '/graphPage/calculateEquations',
-          name: 'CalculateEquations',
-          component: CalculateEquations
+          path: '/graphPage/GraphEquations',
+          name: 'GraphEquations',
+          component: GraphEquations
         }]
     },
     {

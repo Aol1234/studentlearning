@@ -44,43 +44,39 @@ export default {
     }
   },
   methods: {
-    creatUserGroup () {
-      let body = {
+    creatUserGroup () { // Request group creation
+      let body = { // Format body request
         'Name': this.Name,
         'Desc': this.Desc
       }
-      axios({
+      axios({ // Make request
         method: 'post',
         url: api + 'createUserGroup',
         data: JSON.stringify(body), // Get mcq associated with mcq_id
         headers: { 'Authorization': 'Bearer  ' + sessionToken }
       })
         .then((response) => {
-          console.log(response)
-          this.Code = response.data
+          this.Code = response.data // Code response
         })
         .catch(error => {
           console.log(error)
-          this.errored = true
         })
     },
-    joinUserGroup () {
-      let body = {
+    joinUserGroup () { // Request to join group
+      let body = { // Format request body
         'Code': this.Code
       }
-      axios({
+      axios({ // Make request
         method: 'post',
         url: api + 'joinUserGroup',
         data: JSON.stringify(body), // Get mcq associated with mcq_id
         headers: { 'Authorization': 'Bearer  ' + sessionToken }
       })
         .then((response) => {
-          console.log(response)
           this.Code = response.data
         })
         .catch(error => {
           console.log(error)
-          this.errored = true
         })
     }
   }
