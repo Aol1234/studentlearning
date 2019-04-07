@@ -8,7 +8,7 @@
         <b-container fluid class="text-light text-center" >
           <b-row class="mb-5">
             <b-col><router-link :to="{ name: 'MCQView' }">Multiple Choice Questions</router-link></b-col>
-            <b-col><router-link :to="{ name: 'GraphChartView' }">Hills-Langmuir Graph</router-link></b-col>
+            <b-col><router-link :to="{ name: 'GraphChartView' }">Pharmacology Graphing Tool</router-link></b-col>
           </b-row>
           <b-row class="mb-5">
             <b-col><router-link :to="{ name: 'McqCreatorView' }">Create MCQ</router-link></b-col>
