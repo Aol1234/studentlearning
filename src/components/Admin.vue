@@ -12,7 +12,7 @@ import axios from 'axios'
 export default {
   name: 'Admin',
   methods: {
-    week () {
+    week () { // Request weekly analysis
       axios({
         method: 'get',
         url: api + 'admin/collectUserData',
@@ -24,7 +24,7 @@ export default {
           console.log(error)
         })
     },
-    month () {
+    month () { // Request monthly analysis
       axios({
         method: 'get',
         url: api + 'admin/collectUserDataMonth',
@@ -36,7 +36,7 @@ export default {
           console.log(error)
         })
     },
-    year () {
+    year () { // Request yearly analysis
       axios({
         method: 'get',
         url: api + 'admin/collectUserDataYear',
